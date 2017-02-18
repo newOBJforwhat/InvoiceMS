@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:cache="http://www.springframework.org/schema/cache" xmlns:p="http://www.springframework.org/schema/p"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/aop
+     http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+     http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
+    <!-- 引入jdbc配置文件 -->    
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">    
+        <property name="locations">    
+            <list>    
+                <value>classpath:jdbc.properties</value>    
+            </list>    
+        </property>    
+    </bean> 
+	<!-- 配置数据源-->  
+	<bean id="DataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
+		<property name="url"> 
+			<value>${jdbc.url}</value> 
+		</property>  
+		<property name="driverClassName" value="${jdbc.driverClass}"/>  
+		<property name="username">  
+			<value>${jdbc.username}</value>  
+		</property>  
+		<property name="password">  
+			<value>${jdbc.password}</value>  
+		</property>
+	</bean>
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+		<property name="dataSource" ref="DataSource" />  
+		<property name="configLocation" value="classpath:Mybatis-Config.xml"></property> 
+		<!-- 自动扫描mapping.xml文件 -->
+        <property name="mapperLocations">
+        	<list>
+				<value>classpath:Dao/*.xml</value>
+				<value>classpath:Test/*.xml</value>
+			</list>
+        </property> 
+	</bean>  
+	<!--测试用-->
+	
+</beans>
