@@ -13,6 +13,9 @@
      http://www.springframework.org/schema/tx
      http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
      http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
+    <!--加入过滤的配置是为了使mybatis的事务起作用-->
+    <context:component-scan base-package="Service" />
+    <context:annotation-config />
     <!-- 引入jdbc配置文件 -->    
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">    
         <property name="locations">    
@@ -21,8 +24,8 @@
             </list>    
         </property>    
     </bean> 
-	<!-- 配置数据源-->  
-	<bean id="DataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
+	<!-- 配置数据源 -->  
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
 		<property name="url"> 
 			<value>${jdbc.url}</value> 
 		</property>  
@@ -34,17 +37,27 @@
 			<value>${jdbc.password}</value>  
 		</property>
 	</bean>
+	<!-- session工厂 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
-		<property name="dataSource" ref="DataSource" />  
+		<property name="dataSource" ref="dataSource" />  
 		<property name="configLocation" value="classpath:Mybatis-Config.xml"></property> 
 		<!-- 自动扫描mapping.xml文件 -->
         <property name="mapperLocations">
         	<list>
 				<value>classpath:Dao/*.xml</value>
-				<value>classpath:Test/*.xml</value>
 			</list>
         </property> 
 	</bean>  
-	<!--测试用-->
 	
+	<bean id="userDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+		<property name="mapperInterface" value="Dao.UserMapping"></property>  
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
+	</bean>  
+	
+	<!-- 进行主数据库的事务配置，采用默认策略 -->
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager" />
 </beans>
