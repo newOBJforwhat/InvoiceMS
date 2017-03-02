@@ -48,12 +48,6 @@
 			</list>
         </property> 
 	</bean>  
-	
-	<bean id="userDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
-		<property name="mapperInterface" value="Dao.UserMapping"></property>  
-		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
-	</bean>  
-	
 	<!-- 进行主数据库的事务配置，采用默认策略 -->
     <bean id="transactionManager"
         class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
