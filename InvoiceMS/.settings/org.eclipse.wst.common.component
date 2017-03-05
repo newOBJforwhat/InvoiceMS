@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="SSMDemo">
+    <wb-module deploy-name="InvoiceMS">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="SSMDemo"/>
-        <property name="java-output-path" value="/SSMDemo/build/classes"/>
+        <property name="java-output-path" value="/InvoiceMS/build/classes"/>
+        <property name="context-root" value="InvoiceMS"/>
     </wb-module>
 </project-modules>
