@@ -30,7 +30,7 @@
         	<mvc:mapping path="/**"/>
         	<!-- 需排除拦截的地址 -->  
    			<mvc:exclude-mapping path="/**.jsp"/>
-          	<bean class="Common.Interceptor.UserLoginInterceptor">
+          		<bean class="Common.Interceptor.UserLoginInterceptor">
           	</bean>  
     	</mvc:interceptor> 
     </mvc:interceptors>
