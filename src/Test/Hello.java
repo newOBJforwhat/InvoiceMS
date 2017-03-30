@@ -8,14 +8,12 @@ import Common.InitDataBases;
 import Common.Controller.OutputStringController;
 import Dao.UserDao;
 import Model.User;
-
 import org.apache.log4j.Logger;
 
 @Controller
 public class Hello extends OutputStringController{
 	@Autowired
 	private UserDao uDao;
-	
 	private static Logger logger = Logger.getLogger(Hello.class);
 	//接口形式
 	@RequestMapping(value="/Hello",produces="text/html;charset=UTF-8")
