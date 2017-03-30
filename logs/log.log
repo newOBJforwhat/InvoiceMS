@@ -1,4 +1,0 @@
-2017-02-21 13:25:53  [ main:0 ] - [ DEBUG ]  This is debug message.
-2017-02-21 13:25:53  [ main:8 ] - [ INFO ]  This is info message.
-2017-02-21 13:25:53  [ main:8 ] - [ ERROR ]  This is error message.
-2017-02-21 13:32:34  [ main:0 ] - [ ERROR ]  This is error message.

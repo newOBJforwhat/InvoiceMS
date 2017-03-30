@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Dao.UserDao">
+	<select id="findById" parameterType="long" resultMap="UserMap">
+		select * from User where id = #{id}
+	</select>
+	
+	<resultMap type="User" id="UserMap">
+		<id property="id" column="id"></id>
+		<result property="departmentId" column="department_id"></result>
+		<result property="username" column="username"></result>
+		<result property="password" column="password"></result>
+		<result property="type" column="type"></result>
+	</resultMap>
+</mapper>
