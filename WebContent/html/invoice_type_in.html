@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>录入发票</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/myStyle/style.css" rel="stylesheet">
+</head>
+<body>
+<header class="global-header">
+  <h1>发票管理系统</h1>
+</header>
+<form class="type-in-form" name="typeInForm" onsubmit="submit();return false;">
+  <header class="form-header">
+    <h2>输入发票信息</h2>
+  </header>
+
+  <div class="form-group">
+    <label for="invoice-id">发票号:</label>
+    <input id="invoice-id" class="form-control" type="text" name="invoiceId">
+  </div>
+
+  <div class="form-group">
+    <label for="money">金额:</label>
+    <input id="money" class="form-control" type="text" name="money">
+  </div>
+
+  <div class="form-group">
+    <label for="supplier-name">供应商名字:</label>
+    <input id="supplier-name" class="form-control" type="text" name="supplierName">
+  </div>
+
+  <div class="form-group">
+    <label for="date">开票日期:</label>
+    <input id="date" class="form-control" type="text" name="date">
+  </div>
+
+  <footer class="form-footer">
+    <button class="btn btn-primary submit-button" type="submit">提交</button>
+  </footer>
+</form>
+</body>
+<script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript">
+  function submit() {
+    return false;
+  }
+</script>
+</html>
