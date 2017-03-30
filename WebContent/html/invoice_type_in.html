@@ -10,35 +10,44 @@
 <header class="global-header">
   <h1>发票管理系统</h1>
 </header>
-<form class="type-in-form" name="typeInForm" onsubmit="submit();return false;">
-  <header class="form-header">
-    <h2>输入发票信息</h2>
-  </header>
+<aside class="menu-left-bar">
+  <ul class="menu-list">
+    <li class="menu-item"><a href="./invoice_type_in.html">录入</a></li>
+    <li class="menu-item"><a href="./invoice_preview_list.html">查阅</a></li>
+    <li class="menu-item"><a href="./invoice_verify_list.html">审核</a></li>
+  </ul>
+</aside>
+<main class="main">
+  <form class="type-in-form" name="typeInForm" onsubmit="submit();return false;">
+    <header class="form-header">
+      <h2>输入发票信息</h2>
+    </header>
 
-  <div class="form-group">
-    <label for="invoice-id">发票号:</label>
-    <input id="invoice-id" class="form-control" type="text" name="invoiceId">
-  </div>
+    <div class="form-group">
+      <label for="invoice-id">发票号:</label>
+      <input id="invoice-id" class="form-control" type="text" name="invoiceId">
+    </div>
 
-  <div class="form-group">
-    <label for="money">金额:</label>
-    <input id="money" class="form-control" type="text" name="money">
-  </div>
+    <div class="form-group">
+      <label for="money">金额:</label>
+      <input id="money" class="form-control" type="text" name="money">
+    </div>
 
-  <div class="form-group">
-    <label for="supplier-name">供应商名字:</label>
-    <input id="supplier-name" class="form-control" type="text" name="supplierName">
-  </div>
+    <div class="form-group">
+      <label for="supplier-name">供应商名字:</label>
+      <input id="supplier-name" class="form-control" type="text" name="supplierName">
+    </div>
 
-  <div class="form-group">
-    <label for="date">开票日期:</label>
-    <input id="date" class="form-control" type="text" name="date">
-  </div>
+    <div class="form-group">
+      <label for="date">开票日期:</label>
+      <input id="date" class="form-control" type="text" name="date">
+    </div>
 
-  <footer class="form-footer">
-    <button class="btn btn-primary submit-button" type="submit">提交</button>
-  </footer>
-</form>
+    <footer class="form-footer">
+      <button class="btn btn-primary submit-button" type="submit">提交</button>
+    </footer>
+  </form>
+</main>
 </body>
 <script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../js/bootstrap/bootstrap.min.js"></script>

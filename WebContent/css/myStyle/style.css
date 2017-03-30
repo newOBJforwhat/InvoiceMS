@@ -59,6 +59,29 @@ h5 {
   padding: 20px;
 }
 
+.menu-left-bar {
+  float: left;
+  width: 200px;
+  height: 100%;
+  border-right: 1px solid black;
+}
+
+.menu-left-bar .menu-list {
+  list-style: none;
+}
+
+.menu-left-bar .menu-item {
+  padding-left: 20px;
+  font-size: 24px;
+  line-height: 48px;
+  border-bottom: 1px solid black;
+}
+
+.main {
+  margin-left: 240px;
+}
+
+
 .type-in-form {
   margin: 50px;
   padding: 20px;
@@ -78,4 +101,20 @@ h5 {
 
 .type-in-form .form-footer .submit-button {
   width: 80px;
+}
+
+.preview-list-table {
+  width: 80%;
+  margin: 20px;
+}
+
+.preview-list-table th, td{
+  line-height: 40px;
+  font-size: 20px;
+  border: 1px solid black;
+  padding: 0 5px;
+}
+
+.preview-list-table th {
+  text-align: center;
 }

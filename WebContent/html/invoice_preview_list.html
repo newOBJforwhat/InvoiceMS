@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>查看发票</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/myStyle/style.css" rel="stylesheet">
+</head>
+<body>
+<header class="global-header">
+  <h1>发票管理系统</h1>
+</header>
+<aside class="menu-left-bar">
+  <ul class="menu-list">
+    <li class="menu-item"><a href="./invoice_type_in.html">录入</a></li>
+    <li class="menu-item"><a href="./invoice_preview_list.html">查阅</a></li>
+    <li class="menu-item"><a href="./invoice_verify_list.html">审核</a></li>
+  </ul>
+</aside>
+<main class="main">
+  <table class="preview-list-table" id="preview-list-table">
+    <thead>
+    <tr>
+      <th>发票号</th>
+      <th>录入者</th>
+      <th>金额</th>
+      <th>供应商名字</th>
+      <th>开票日期</th>
+    </tr>
+    </thead>
+    <tbody class="invoice_preview_list">
+    </tbody>
+  </table>
+</main>
+<script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+  var data = [{
+    invoiceId: '23213213',
+    user: '大锤',
+    money: '212',
+    supplierName: '我发了看得见费',
+    date: new Date()
+  }, {
+    invoiceId: '231231232',
+    user: '二锤',
+    money: '221',
+    supplierName: '大丰收',
+    date: new Date()
+  }, {
+    invoiceId: '32132123123123123',
+    user: '三锤',
+    money: '312',
+    supplierName: '分胜负',
+    date: new Date()
+  }];
+
+  function renderTable(tableId, data) {
+    var $table = $('#' + tableId);
+    $table.find('tr').each(function (index, ele) {
+      if (index !== 0) {
+        $(ele).remove();
+      }
+    });
+
+    $.each(data, function (index, item) {
+      var date = new Date(item.date);
+      var row = $('<tr><td></td><td></td><td></td><td></td><td></td></tr>');
+      row.find('td').each(function (index, ele) {
+        switch (index) {
+          case 0:
+            ele.innerHTML = item.invoiceId;
+            break;
+          case 1:
+            ele.innerHTML = item.user;
+            break;
+          case 2:
+            ele.innerHTML = item.money;
+            break;
+          case 3:
+            ele.innerHTML = item.supplierName;
+            break;
+          case 4:
+            ele.innerHTML = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+            break;
+          default:
+            ele.innerHTML = '无效信息'
+        }
+      });
+
+      $table.append(row);
+    })
+  }
+
+  renderTable('preview-list-table', data);
+</script>
+</body>
+</html>
