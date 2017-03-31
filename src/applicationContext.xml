@@ -76,4 +76,7 @@
 		<property name="mapperInterface" value="Dao.UserDao"></property>  
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
 	</bean> 
+	<!--Service配置-->
+	<bean id="userService" class="Service.UserService">  
+	</bean> 
 </beans>

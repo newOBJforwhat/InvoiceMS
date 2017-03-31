@@ -8,6 +8,8 @@ import Common.InitDataBases;
 import Common.Controller.OutputStringController;
 import Dao.UserDao;
 import Model.User;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 @Controller
@@ -40,13 +42,26 @@ public class Hello extends OutputStringController{
 	//数据库测试
 	@RequestMapping(value = "/getUser", produces = "text/html;charset=UTF-8")
 	@ResponseBody 
-	public String start2(long id) {
-		if(id != 0)
-		{
-			User u = uDao.findById(id);
-			System.out.println(u == null);
-			return success(u.getUsername());
-		}
+	public String dbTest() {
+		//会返回一个长度为0的list
+//		List<User> us = uDao.findByDepartment(department);
+//		if(us != null){
+//			for(User u : us){
+//				System.out.println(u.getUsername());
+//			}
+//			return success("");
+//		}
+		//主键自动填充到user对象中
+//		User u = new User();
+//		u.setUsername("xxssd");
+//		u.setPassword("654321");
+//		u.setDepartmentId(1);
+//		u.setName("jkl");
+//		u.setType(1);
+//		uDao.applyUser(u);
+//		System.out.println(u.getId());
+		
+		
 		return failure("传入参数");
 	}
 }

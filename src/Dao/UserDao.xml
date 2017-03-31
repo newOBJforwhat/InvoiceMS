@@ -2,9 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Dao.UserDao">
+	<!--查询-->
 	<select id="findById" parameterType="long" resultMap="UserMap">
 		select * from User where id = #{id}
 	</select>
+	<select id="findByUsernameAndPassword" resultMap="UserMap">
+		select id,department_id,username,password,type from User where username = #{username} 
+		and password = #{password}
+	</select>
+	<select id="findByUsername" resultMap="UserMap">
+		select id,department_id,username,password,type from User where username = #{username} 
+	</select>
+	<select id="findByDepartment" resultMap="UserMap">
+		select id,department_id,username,password,type from User where department_id = #{department} 
+	</select>
+	<!--插入-->
+	<insert id="applyUser" parameterType="User" useGeneratedKeys="true" keyProperty="id" >
+		insert into User(department_id,username,password,name,type) 
+		values(#{departmentId},#{username},#{password},#{name},#{type})
+	</insert>
 	
 	<resultMap type="User" id="UserMap">
 		<id property="id" column="id"></id>

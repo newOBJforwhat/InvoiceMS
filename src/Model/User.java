@@ -19,6 +19,7 @@ public class User {
 	private long departmentId;
 	private String username;
 	private String password;
+	private String name;
 	private int type;
 	
 	public long getId() {
@@ -44,5 +45,17 @@ public class User {
 	}
 	public void setType(int type) {
 		this.type = type;
+	}
+	public long getDepartmentId() {
+		return departmentId;
+	}
+	public void setDepartmentId(long departmentId) {
+		this.departmentId = departmentId;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 }
