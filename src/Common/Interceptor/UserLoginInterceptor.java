@@ -35,7 +35,8 @@ public class UserLoginInterceptor implements HandlerInterceptor{
 	//前置执行
 	@Override
 	public boolean preHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2) throws Exception {
-		System.out.println("执行登录过滤");
+		logger.debug("用户登录拦截器的前置方法.....");
+		
 		HttpSession session = arg0.getSession();
 		User u = (User)session.getAttribute(CommonInfo.userInfo);
 		if(u == null)

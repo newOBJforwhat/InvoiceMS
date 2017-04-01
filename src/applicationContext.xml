@@ -15,6 +15,8 @@
      http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
     <!--加入过滤的配置是为了使mybatis的事务起作用-->
     <context:component-scan base-package="Service" />
+     <!--扫描bean-->
+    <context:component-scan base-package="Dao"/>
     <context:annotation-config />
     <!-- 引入jdbc配置文件 -->    
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">    
@@ -71,12 +73,12 @@
 			</list>
 		</property>
 	</bean> 
-	<!--Dao配置-->
+	<!--Dao config-->
 	<bean id="userDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
 		<property name="mapperInterface" value="Dao.UserDao"></property>  
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
 	</bean> 
-	<!--Service配置-->
-	<bean id="userService" class="Service.UserService">  
+	<!--Service config-->
+	<bean id="userService" class="Service.UserService" scope="prototype">
 	</bean> 
 </beans>
