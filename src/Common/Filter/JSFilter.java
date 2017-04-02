@@ -35,7 +35,7 @@ public class JSFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletResponse httpres = (HttpServletResponse)response;
-		System.out.println("执行过滤请求静态资源");
+		System.out.println("过滤.js");
 		httpres.sendRedirect("/InvoiceMS/index");
 	}
 

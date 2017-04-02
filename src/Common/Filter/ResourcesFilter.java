@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  * 过滤所有.jsp资源的请求
  * Servlet Filter implementation class ResourcesFilter
  */
-@WebFilter(filterName="ResourcesFilter",urlPatterns="*.jsp")
+@WebFilter("*.jsp")
 public class ResourcesFilter implements Filter {
 
     /**
