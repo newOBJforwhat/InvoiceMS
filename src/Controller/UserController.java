@@ -1,7 +1,6 @@
 package Controller;
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
@@ -14,7 +13,6 @@ import Common.CommonInfo;
 import Common.Controller.OutputStringController;
 import Model.User;
 import Service.UserService;
-
 @Controller
 @Scope("request")
 @RequestMapping(value="/user")
@@ -29,7 +27,7 @@ public class UserController extends OutputStringController{
 	 * @param password
 	 * @return
 	 */
-	@RequestMapping(value="/login",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/noNeedLogin/login",produces="text/html;charset=UTF-8")
 	@ResponseBody 
 	public String login(HttpSession session,String username,String password){
 		if(getCurrentUser(session) != null)
@@ -51,7 +49,7 @@ public class UserController extends OutputStringController{
 	 * @param username
 	 * @return
 	 */
-	@RequestMapping(value="/validateUser",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/noNeedLogin/validateUser",produces="text/html;charset=UTF-8")
 	@ResponseBody 
 	public String validateUser(String username){
 		User u = null;

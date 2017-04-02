@@ -69,4 +69,9 @@ public class Hello extends OutputStringController{
 		
 		return success("");
 	}
+	//restful接口
+	@RequestMapping(value = "/say", produces = "text/html;charset=UTF-8")
+	public String say() {
+		return "index";
+	}
 }
