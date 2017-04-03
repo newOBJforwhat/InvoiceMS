@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="css/myStyle/demo.css"></link>
+    <script src="js/jquery/jquery.min.js"></script>
 <title>主页</title>
 </head>
 <body>

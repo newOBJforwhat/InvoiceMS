@@ -1,6 +1,9 @@
 package Common.Controller;
-import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import Common.CommonInfo;
+import Model.User;
 import net.sf.json.JSONObject;
 /**
  * 接口输出JSON形式
@@ -63,5 +66,10 @@ public class OutputStringController {
 		else
 			result.put("result", resultStr);
 		return result.toString();
+	}
+	//获取当前用户
+	public User getCurrentUser(HttpSession session){
+		User u = (User) session.getAttribute(CommonInfo.userInfo);
+		return u;
 	}
 }

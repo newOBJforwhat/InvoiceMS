@@ -20,17 +20,17 @@
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
             id="internalResourceViewResolver">
         <!-- 前缀 -->
-        <property name="prefix" value="jsp/" />
+        <property name="prefix" value="" />
         <!-- 后缀 -->
-        <property name="suffix" value="" />
+        <property name="suffix" value=".jsp" />
     </bean>
     <!--配置拦截器-->
     <mvc:interceptors>
     	<mvc:interceptor>  
-        	<mvc:mapping path="/**"/>
-        	<!-- 需排除拦截的地址 -->  
-   			<mvc:exclude-mapping path="/**.jsp"/>
-          		<bean class="Common.Interceptor.UserLoginInterceptor">
+        	<mvc:mapping path="/user/**"/>
+        	<!-- 需排除拦截的地址 -->
+   			<mvc:exclude-mapping path="/user/noNeedLogin/**"/>
+          	<bean class="Common.Interceptor.UserLoginInterceptor">
           	</bean>  
     	</mvc:interceptor> 
     </mvc:interceptors>
