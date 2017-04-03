@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import Dao.UserDao;
+import Form.ApplyUserForm;
 import Model.User;
 
 @Service
@@ -35,7 +36,6 @@ public class UserService {
 	 * isolation = Isolation.REPEATABLE_READ
 	 * isolation = Isolation.SERIALIZABLE
 	 * 
-	 * 
 	 */
 	
 	@Transactional(rollbackFor=Exception.class,readOnly = true, propagation = Propagation.REQUIRED,timeout=15)
@@ -56,6 +56,31 @@ public class UserService {
 	public List<User> departmentMembers(long departmentId){
 		List<User> dmembers =  uDao.findByDepartment(departmentId);
 		return dmembers ;
+	}
+	@Transactional(rollbackFor=Exception.class,readOnly = false, propagation = Propagation.REQUIRED,timeout=15)
+	public long applyUser(ApplyUserForm form){
+		User u = new User();
+		u.setId(0);
+		u.setDepartmentId(form.getDepartmentId());
+		u.setName(form.getName());
+		u.setPassword(form.getPassword());
+		u.setType(form.getType());
+		u.setUsername(form.getUsername());
+		if(uDao.findByUsername(u.getUsername()) != null){
+			uDao.applyUser(u);
+		}
+		return u.getId();
+	}
+	@Transactional(rollbackFor=Exception.class,readOnly = false, propagation = Propagation.REQUIRED,timeout=15)
+	public void updateUserInfo(long id,String password,String name,long departmentId){
+		uDao.updateInfo(id, departmentId, password, name);
+	}
+	@Transactional(rollbackFor=Exception.class,readOnly = false, propagation = Propagation.REQUIRED,timeout=15)
+	public void deleteUser(long id){
+		if(uDao.findById(id) != null){
+			uDao.deleteById(id);
+		}else
+			throw new NullPointerException();
 	}
 	public void setuDao(UserDao uDao) {
 		this.uDao = uDao;

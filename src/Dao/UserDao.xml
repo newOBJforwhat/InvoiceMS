@@ -17,15 +17,32 @@
 	<select id="findByDepartment" resultMap="UserMap">
 		select id,department_id,username,password,type from User where department_id = #{department} 
 	</select>
+	<select id="findAll" resultMap="UserMap">
+		select * from User order by id desc
+	</select>
 	<!--插入-->
 	<insert id="applyUser" parameterType="User" useGeneratedKeys="true" keyProperty="id" >
 		insert into User(department_id,username,password,name,type) 
 		values(#{departmentId},#{username},#{password},#{name},#{type})
 	</insert>
-	
+	<!--更新-->
+	<update id="updateInfo" >
+        update User
+        <set>
+            <if test="departmentId != 0">department_id=#{departmentId},</if>
+            <if test="#{password} != null">password=#{password},</if>
+            <if test="#{name} != null">name=#{name},</if>
+        </set>
+        where id=#{id}
+	</update>
+	<!--删除-->
+	<delete id="deleteById" parameterType="long">
+		delete from User where id = #{id}
+	</delete>
 	<resultMap type="User" id="UserMap">
 		<id property="id" column="id"></id>
 		<result property="departmentId" column="department_id"></result>
+		<result property="name" column="name"></result>
 		<result property="username" column="username"></result>
 		<result property="password" column="password"></result>
 		<result property="type" column="type"></result>
