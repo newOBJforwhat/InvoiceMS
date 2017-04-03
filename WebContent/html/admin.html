@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>用户管理</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/bootstrap-table.min.css" rel="stylesheet">
+  <link href="../css/myStyle/style.css" rel="stylesheet">
+</head>
+<body>
+<table id="table"></table>
+
+<script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap/bootstrap-table-zh-CN.min.js"></script>
+<script type="text/javascript">
+$('#table').bootstrapTable({
+  columns: [{
+    field: 'id',
+    title: '用户ID'
+  }, {
+    field: 'username',
+    title: '用户名'
+  }, {
+    field: 'password',
+    title: '用户密码'
+  }],
+  data: [{
+    id: 1,
+    username: 'Item 1',
+    password: '$1'
+  }, {
+    id: 2,
+    username: 'Item 2',
+    password: '$2'
+  }]
+})
+</script>
+</body>
+</html>
