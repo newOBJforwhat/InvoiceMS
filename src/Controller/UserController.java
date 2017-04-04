@@ -23,6 +23,15 @@ public class UserController extends OutputStringController{
 	@Autowired
 	private UserService uService;
 	private static Logger logger = Logger.getLogger(UserController.class);
+	
+	/**
+	 * 登录页面
+	 * @return
+	 */
+	@RequestMapping(value="/noNeedLogin/loginPage",produces="text/html;charset=UTF-8")
+	public String loginPage(){
+		return "loginPage";
+	}
 	/**
 	 * 用户登录
 	 * @param session
@@ -184,5 +193,41 @@ public class UserController extends OutputStringController{
 			return failure("产生异常");
 		}
 		return success("删除成功");
+	}
+	
+	/**
+	 * 软删除，把状态改为1
+	 * @param session
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/softDelete",produces="text/html;charset=UTF-8")
+	@ResponseBody 
+	public String softDelete(HttpSession session,long id){
+		User u = getCurrentUser(session);
+		if(u.getType() != UserType.SUPER.getCode())
+			return failure("没有权限更改");
+		try{
+			uService.softDelete(id);
+		}catch (Exception e) {
+			logger.error("软删除失败："+e.getMessage());
+			return failure("软删除失败");
+		}
+		return success("软删除成功");
+	}
+	/**
+	 * 查询所有用户页面
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/queryAllUser",produces="text/html;charset=UTF-8")
+	public String queryAllUserPage(HttpServletRequest request){
+		try{
+			List<User> users = uService.findAll();
+			request.setAttribute("users", users);
+		}catch (Exception e) {
+			logger.error("查询所有user错误");
+		}
+		return "queryAllUser";
 	}
 }

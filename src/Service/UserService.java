@@ -1,13 +1,12 @@
 package Service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import Dao.UserDao;
+import Enum.DeleteCode;
 import Form.ApplyUserForm;
 import Model.User;
 
@@ -66,6 +65,7 @@ public class UserService {
 		u.setPassword(form.getPassword());
 		u.setType(form.getType());
 		u.setUsername(form.getUsername());
+		u.setIsDeleted(DeleteCode.UNDELETED.getCode());
 		if(uDao.findByUsername(u.getUsername()) != null){
 			uDao.applyUser(u);
 		}
@@ -81,6 +81,18 @@ public class UserService {
 			uDao.deleteById(id);
 		}else
 			throw new NullPointerException();
+	}
+	@Transactional(rollbackFor=Exception.class,readOnly = false, propagation = Propagation.REQUIRED,timeout=15)
+	public void softDelete(long id){
+		if(uDao.findById(id) != null){
+			uDao.deleteById(id);
+		}else
+			throw new NullPointerException();
+		uDao.updateDeleteStatus(id, DeleteCode.DELETED.getCode());
+	}
+	@Transactional(rollbackFor=Exception.class,readOnly = true, propagation = Propagation.REQUIRED,timeout=15)
+	public List<User> findAll(){
+		return uDao.findAll();
 	}
 	public void setuDao(UserDao uDao) {
 		this.uDao = uDao;

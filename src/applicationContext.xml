@@ -77,8 +77,14 @@
 	<bean id="userDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
 		<property name="mapperInterface" value="Dao.UserDao"></property>  
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
-	</bean> 
+	</bean>
+	<bean id="departmentDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+		<property name="mapperInterface" value="Dao.DepartmentDao"></property>  
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
+	</bean>  
 	<!--Service config-->
 	<bean id="userService" class="Service.UserService" scope="prototype">
-	</bean> 
+	</bean>
+	<bean id="departmentService" class="Service.DepartmentDao" scope="singleton">
+	</bean>  
 </beans>

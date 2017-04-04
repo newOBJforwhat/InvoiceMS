@@ -21,7 +21,8 @@ public class User {
 	private String password;
 	private String name;
 	private int type;
-	
+	@Column("is_deleted")
+	private int isDeleted;
 	public long getId() {
 		return id;
 	}
@@ -57,5 +58,11 @@ public class User {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public int getIsDeleted() {
+		return isDeleted;
+	}
+	public void setIsDeleted(int isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 }

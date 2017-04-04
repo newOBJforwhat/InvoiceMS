@@ -10,6 +10,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletResponse;
 
+import Common.CommonInfo;
+
 /**
  * 过滤所有.jsp资源的请求
  * Servlet Filter implementation class ResourcesFilter
@@ -35,7 +37,7 @@ public class ResourcesFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		System.out.println("过滤.jsp请求");
 		HttpServletResponse servletResp = (HttpServletResponse)response;
-		servletResp.sendRedirect("/InvoiceMS/index");//重定向到首页
+		servletResp.sendRedirect("/"+CommonInfo.projName+"/index");//重定向到首页
 //		chain.doFilter(request, response);
 	}
 
