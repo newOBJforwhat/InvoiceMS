@@ -85,6 +85,6 @@
 	<!--Service config-->
 	<bean id="userService" class="Service.UserService" scope="prototype">
 	</bean>
-	<bean id="departmentService" class="Service.DepartmentDao" scope="singleton">
+	<bean id="departmentService" class="Service.DepartmentService" scope="singleton">
 	</bean>  
 </beans>
