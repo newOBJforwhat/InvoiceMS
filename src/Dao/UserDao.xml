@@ -30,13 +30,15 @@
         update User
         <set>
             <if test="departmentId != 0">department_id=#{departmentId},</if>
-            <if test="#{password} != null">password=#{password},</if>
             <if test="#{name} != null">name=#{name},</if>
         </set>
         where id=#{id}
 	</update>
 	<update id="updateDeleteStatus">
 		update User set is_deleted = #{code} where id = #{id}
+	</update>
+	<update id="updatePassword">
+		update User set password = #{password} where id = #{id}
 	</update>
 	<!--删除-->
 	<delete id="deleteById" parameterType="long">

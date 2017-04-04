@@ -72,8 +72,8 @@ public class UserService {
 		return u.getId();
 	}
 	@Transactional(rollbackFor=Exception.class,readOnly = false, propagation = Propagation.REQUIRED,timeout=15)
-	public void updateUserInfo(long id,String password,String name,long departmentId){
-		uDao.updateInfo(id, departmentId, password, name);
+	public void updateUserInfo(long id,String name,long departmentId){
+		uDao.updateInfo(id, departmentId, name);
 	}
 	@Transactional(rollbackFor=Exception.class,readOnly = false, propagation = Propagation.REQUIRED,timeout=15)
 	public void deleteUser(long id){
@@ -93,6 +93,13 @@ public class UserService {
 	@Transactional(rollbackFor=Exception.class,readOnly = true, propagation = Propagation.REQUIRED,timeout=15)
 	public List<User> findAll(){
 		return uDao.findAll();
+	}
+	@Transactional(rollbackFor=Exception.class,readOnly = false, propagation = Propagation.REQUIRED,timeout=15)
+	public void alterPassword(long id,String password){
+		if(uDao.findById(id) != null)
+			uDao.updatePassword(id, password);
+		else
+			throw new NullPointerException("未找到用户id："+id);
 	}
 	public void setuDao(UserDao uDao) {
 		this.uDao = uDao;

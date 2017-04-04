@@ -14,8 +14,9 @@ public interface UserDao {
 	//插入
 	public int applyUser(User u);
 	//更新
-	public void updateInfo(@Param("id")long id,@Param("departmentId")long departmentId,@Param("password")String password,@Param("name")String name);
+	public void updateInfo(@Param("id")long id,@Param("departmentId")long departmentId,@Param("name")String name);
 	public void updateDeleteStatus(@Param("id")long id,@Param("code")int code);
+	public void updatePassword(@Param("id")long id,@Param("password")String password);
 	//删除
 	public void deleteById(long id);
 }

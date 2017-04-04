@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import Common.CommonInfo;
@@ -61,9 +62,9 @@ public class UserController extends OutputStringController{
 	 * @param username
 	 * @return
 	 */
-	@RequestMapping(value="/noNeedLogin/validateUser",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/noNeedLogin/validateUser/{username}",produces="text/html;charset=UTF-8")
 	@ResponseBody 
-	public String validateUser(String username){
+	public String validateUser(@PathVariable("username")String username){
 		User u = null;
 		try{
 			u = uService.validateUser(username);
@@ -82,8 +83,8 @@ public class UserController extends OutputStringController{
 	 * @param departmentId
 	 * @return
 	 */
-	@RequestMapping(value="/deparmentMember",produces="text/html;charset=UTF-8")
-	public String departmentMember(HttpServletRequest request,long departmentId){
+	@RequestMapping(value="/deparmentMember/{departmentId}",produces="text/html;charset=UTF-8")
+	public String departmentMember(HttpServletRequest request,@PathVariable("departmentId")long departmentId){
 		List<User> members = null;
 		try{
 			members = uService.departmentMembers(departmentId);
@@ -139,36 +140,60 @@ public class UserController extends OutputStringController{
 		return "updateUserInfoPage";
 	}
 	/**
-	 * 更新用户信息接口
+	 * 修改密码接口
 	 * @param session
 	 * @param password
+	 * @param passwordAgain
+	 * @return
+	 */
+	@RequestMapping(value="/alterPassword",produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String alterPassword(HttpSession session,String password,String passwordAgain){
+		if (!password.equals(passwordAgain))
+			return failure("两次密码输入不正确");
+		try {
+			uService.alterPassword(getCurrentUser(session).getId(), password);
+			return success("密码修改成功");
+		} catch (NullPointerException e) {
+			logger.debug("查询不到用户:" + e.getMessage());
+			return failure("查询不到用户");
+		} catch (Exception e) {
+			logger.error("修改密码产生异常:" + e.getMessage());
+			return failure("修改密码异常");
+		}
+	}
+	/**
+	 * 修改密码页面
+	 * @return
+	 */
+	@RequestMapping(value="/alterPasswordPage",produces="text/html;charset=UTF-8")
+	public String alterPassword(){
+		return "alterPasswordPage";
+	}
+	/**
+	 * 更新用户信息接口
+	 * @param session
 	 * @param name
 	 * @param departmentId
 	 * @return
 	 */
 	@RequestMapping(value="/updateInfo",produces="text/html;charset=UTF-8")
 	@ResponseBody 
-	public String updateInfo(HttpSession session,String password,String name,long departmentId){
+	public String updateInfo(HttpSession session,String name,long departmentId){
 		User u = getCurrentUser(session);
-		String tpassword = password;
 		String tname = name;
 		long tdepartmentId = departmentId;
 		int control = 0;
-		if(tpassword == null || tpassword.equals("")){
-			tpassword = u.getPassword();
-			control = control + 1;
-		}
-		else if(tname == null || tname.equals("")){
+		if(tname == null || tname.equals("")){
 			tname = u.getName();
 			control = control + 1;
 		}
-		else if(tdepartmentId == 0){
+		if(tdepartmentId == 0){
 			tdepartmentId = u.getDepartmentId();
 			control = control + 1;
 		}
-		System.out.println(u.getId()+" "+tpassword+" "+tname+" "+tdepartmentId);
-		if(control != 3)
-			uService.updateUserInfo(u.getId(), tpassword, tname, tdepartmentId);
+		if(control != 2)
+			uService.updateUserInfo(u.getId(), tname, tdepartmentId);
 		return success("更新成功");
 	}
 	/**
@@ -177,9 +202,9 @@ public class UserController extends OutputStringController{
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="/deleteUser",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/deleteUser/{id}",produces="text/html;charset=UTF-8")
 	@ResponseBody 
-	public String deleteUser(HttpSession session,long id){
+	public String deleteUser(HttpSession session,@PathVariable("id")long id){
 		User u = getCurrentUser(session);
 		if(u.getType() != UserType.SUPER.getCode())
 			return failure("没有权限更改");
@@ -201,9 +226,9 @@ public class UserController extends OutputStringController{
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="/softDelete",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/softDelete/{id}",produces="text/html;charset=UTF-8")
 	@ResponseBody 
-	public String softDelete(HttpSession session,long id){
+	public String softDelete(HttpSession session,@PathVariable("id")long id){
 		User u = getCurrentUser(session);
 		if(u.getType() != UserType.SUPER.getCode())
 			return failure("没有权限更改");
