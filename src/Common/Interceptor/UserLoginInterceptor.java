@@ -1,5 +1,4 @@
 package Common.Interceptor;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -38,7 +37,7 @@ public class UserLoginInterceptor implements HandlerInterceptor{
 		if(u == null)
 		{
 			logger.debug("用户未登录");
-			arg1.sendRedirect("/InvoiceMS/index");
+			arg1.sendRedirect("/"+CommonInfo.projName+"/index");
 			return false;
 		}
 		else

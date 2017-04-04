@@ -22,18 +22,23 @@
 	</select>
 	<!--插入-->
 	<insert id="applyUser" parameterType="User" useGeneratedKeys="true" keyProperty="id" >
-		insert into User(department_id,username,password,name,type) 
-		values(#{departmentId},#{username},#{password},#{name},#{type})
+		insert into User(department_id,username,password,name,type,is_deleted) 
+		values(#{departmentId},#{username},#{password},#{name},#{type},#{isDeleted})
 	</insert>
 	<!--更新-->
 	<update id="updateInfo" >
         update User
         <set>
             <if test="departmentId != 0">department_id=#{departmentId},</if>
-            <if test="#{password} != null">password=#{password},</if>
             <if test="#{name} != null">name=#{name},</if>
         </set>
         where id=#{id}
+	</update>
+	<update id="updateDeleteStatus">
+		update User set is_deleted = #{code} where id = #{id}
+	</update>
+	<update id="updatePassword">
+		update User set password = #{password} where id = #{id}
 	</update>
 	<!--删除-->
 	<delete id="deleteById" parameterType="long">
@@ -46,5 +51,6 @@
 		<result property="username" column="username"></result>
 		<result property="password" column="password"></result>
 		<result property="type" column="type"></result>
+		<result property="isDeleted" column="is_deleted"></result>
 	</resultMap>
 </mapper>
