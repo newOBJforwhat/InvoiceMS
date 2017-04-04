@@ -9,17 +9,17 @@
 <body class="login-body">
 <section class="login-container-bg"></section>
 <section class="login-container">
-  <form onsubmit="login();return false;">
+  <form onsubmit="login(event)">
     <header class="login-header">
       <h3>用户登录</h3>
     </header>
     <div class="form-group">
       <label for="username">用户名:</label>
-      <input id="username" class="form-control" type="text">
+      <input id="username" class="form-control" type="text" required>
     </div>
     <div class="form-group">
       <label for="password">登录密码:</label>
-      <input id="password" class="form-control" type="password">
+      <input id="password" class="form-control" type="password" required>
     </div>
     <footer class="login-footer">
       <label for="remember-me">记住我</label><input id="remember-me" type="checkbox">
@@ -46,7 +46,9 @@
 <script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../js/bootstrap/bootstrap.min.js"></script>
 <script type="text/javascript">
-  function login() {
+  function login(e) {
+    e.preventDefault();
+
     $.post('/login', function (data) {
       if (data.success) {
         location.href = '../index.html'
