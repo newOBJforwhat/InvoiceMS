@@ -50,12 +50,23 @@ public class UserController extends OutputStringController{
 			user = uService.login(username, password);
 		} catch (Exception e) {
 			logger.error("登录发生异常:" + e.getMessage());
+			return failure("登录发生异常");
 		}
 		if (user != null) {
 			session.setAttribute(CommonInfo.userInfo, user);
 			return success("登录成功");
 		}
 		return failure("不存在此用户");
+	}
+	/**
+	 * 登出方法
+	 * @param session
+	 */
+	@RequestMapping(value="/logout",produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String logout(HttpSession session){
+		session.setAttribute(CommonInfo.userInfo, null);
+		return success("登出成功");
 	}
 	/**
 	 * ajax接口验证用户
@@ -99,11 +110,9 @@ public class UserController extends OutputStringController{
 	 * @param form
 	 * @return
 	 */
-	@RequestMapping(value="/applyUser",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/super/applyUser",produces="text/html;charset=UTF-8")
 	@ResponseBody 
-	public String applyUser(HttpSession session,ApplyUserForm form){
-		if(getCurrentUser(session).getType() != UserType.SUPER.getCode())
-			return failure("只有超级用户有权限申请");
+	public String applyUser(ApplyUserForm form){
 		//后端校验
 		if(form.getUsername() == null || form.getUsername().equals(""))
 			return failure("请填写用户名");
@@ -202,12 +211,9 @@ public class UserController extends OutputStringController{
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="/deleteUser/{id}",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/super/deleteUser/{id}",produces="text/html;charset=UTF-8")
 	@ResponseBody 
-	public String deleteUser(HttpSession session,@PathVariable("id")long id){
-		User u = getCurrentUser(session);
-		if(u.getType() != UserType.SUPER.getCode())
-			return failure("没有权限更改");
+	public String deleteUser(@PathVariable("id")long id){
 		try{
 			uService.deleteUser(id);
 		}catch (NullPointerException e) {
@@ -226,12 +232,9 @@ public class UserController extends OutputStringController{
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="/softDelete/{id}",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/super/softDelete/{id}",produces="text/html;charset=UTF-8")
 	@ResponseBody 
-	public String softDelete(HttpSession session,@PathVariable("id")long id){
-		User u = getCurrentUser(session);
-		if(u.getType() != UserType.SUPER.getCode())
-			return failure("没有权限更改");
+	public String softDelete(@PathVariable("id")long id){
 		try{
 			uService.softDelete(id);
 		}catch (Exception e) {
@@ -245,7 +248,7 @@ public class UserController extends OutputStringController{
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value="/queryAllUser",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/super/queryAllUser",produces="text/html;charset=UTF-8")
 	public String queryAllUserPage(HttpServletRequest request){
 		try{
 			List<User> users = uService.findAll();

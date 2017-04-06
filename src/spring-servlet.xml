@@ -28,10 +28,16 @@
     <mvc:interceptors>
     	<mvc:interceptor>  
         	<mvc:mapping path="/user/**"/>
+        	<mvc:mapping path="/department/**"/> 
         	<!-- 需排除拦截的地址 -->
    			<mvc:exclude-mapping path="/user/noNeedLogin/**"/>
           	<bean class="Common.Interceptor.UserLoginInterceptor">
           	</bean>  
     	</mvc:interceptor> 
+    	<mvc:interceptor>  
+           <mvc:mapping path="/user/super/**"/>  
+           <mvc:mapping path="/department/**"/>  
+           <bean class="Common.Interceptor.SuperUserInterceptor" />  
+        </mvc:interceptor> 
     </mvc:interceptors>
 </beans>
