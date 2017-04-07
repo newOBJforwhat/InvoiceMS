@@ -1,5 +1,7 @@
 package Service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -34,5 +36,10 @@ public class InvoiceService {
 		invoice.setRegisterDate(System.currentTimeMillis());
 		
 		iDao.addInvoice(invoice);
+	}
+	@Transactional(rollbackFor=Exception.class,readOnly = true, propagation = Propagation.REQUIRED,timeout=15)
+	public List<Invoice> getByUserid(long userid){
+		List<Invoice> results = iDao.findByUserId(userid);
+		return results;
 	}
 }

@@ -1,5 +1,8 @@
 package Controller;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import Common.BusinessErrorException;
 import Common.Controller.OutputStringController;
 import Form.InvoiceForm;
+import Model.Invoice;
 import Service.InvoiceService;
 
 @Controller
@@ -38,5 +42,22 @@ public class InvoiceController extends OutputStringController{
 			logger.error("录入错误:"+e.getMessage());
 			return failure("录入出现异常!");
 		}
+	}
+	/**
+	 * 打开本人发票
+	 * @param session
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/myInvoicePage",produces="text/html;charset=UTF-8")
+	public String myInvoice(HttpSession session,HttpServletRequest request){
+		long userid = getCurrentUser(session).getId();
+		try{
+			List<Invoice> invoices = iService.getByUserid(userid);
+			request.setAttribute("invoices", invoices);
+		}catch (Exception e) {
+			logger.error("获取本人发票失败："+e.getMessage());
+		}
+		return "myInvoicePage";
 	}
 }

@@ -1,5 +1,7 @@
 package Dao;
 
+import java.util.List;
+
 import Model.Invoice;
 
 public interface InvoiceDao {
@@ -8,5 +10,6 @@ public interface InvoiceDao {
 	//删除
 	//查找
 	public Invoice findByNumber(String invoiceNumber);
+	public List<Invoice> findByUserId(long userid);
 	//修改
 }
