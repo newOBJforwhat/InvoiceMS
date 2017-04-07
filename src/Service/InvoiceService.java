@@ -1,8 +1,38 @@
 package Service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import Common.BusinessErrorException;
+import Dao.InvoiceDao;
+import Enum.InvoiceStatus;
+import Form.InvoiceForm;
+import Model.Invoice;
 
 @Service
 public class InvoiceService {
-
+	@Autowired
+	private InvoiceDao iDao;
+	
+	@Transactional(rollbackFor=Exception.class,readOnly = false, propagation = Propagation.REQUIRED,timeout=15)
+	public void enteringInvoice(long userid,InvoiceForm form) throws BusinessErrorException{
+		if(iDao.findByNumber(form.getInvoiceNumber()) != null)
+		{
+			throw new BusinessErrorException("发票编号已存在："+form.getInvoiceNumber());
+		}
+		Invoice invoice = new Invoice();
+		invoice.setInvoiceNumber(form.getInvoiceNumber());
+		invoice.setInvoiceDate(form.getInvoiceDate());
+		invoice.setMoney(form.getMoney());
+		invoice.setStatus(InvoiceStatus.ENTERING.getCode());
+		invoice.setSupplierId(form.getSupplierId());
+		invoice.setSupplierName(form.getSupplierName());
+		
+		//系统设置
+		invoice.setRegister(userid);
+		invoice.setRegisterDate(System.currentTimeMillis());
+		
+		iDao.addInvoice(invoice);
+	}
 }

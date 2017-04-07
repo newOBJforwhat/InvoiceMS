@@ -15,6 +15,7 @@ public class Department {
 	@AutoIncrement
 	private long id;
 	private String name;
+	private String power;
 	public long getId() {
 		return id;
 	}
@@ -26,5 +27,11 @@ public class Department {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getPower() {
+		return power;
+	}
+	public void setPower(String power) {
+		this.power = power;
 	}
 }

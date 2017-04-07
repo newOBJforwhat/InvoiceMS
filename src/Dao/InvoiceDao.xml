@@ -2,5 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Dao.InvoiceDao">
-		
+	<!--添加-->
+	<insert id = "addInvoice">
+		insert into Invoice(invoice_number,money,supplier_id,supplier_name,status,invoice_date,register,register_date) 
+		values(#{invoiceNumber},#{money},#{supplierId},#{supplierName},#{status},#{invoiceDate},#{register},#{registerDate})
+	</insert>		
+	<!--查找-->	
+	<select id = "findByNumber" resultMap="InvoiceMap">
+		select * from Invoice where id = #{id}
+	</select>
+	<resultMap type="Invoice" id="InvoiceMap">
+		<id property="id" column="id"></id>
+		<result property="invoiceNumber" column="invoice_number"></result>
+		<result property="money" column="money"></result>
+		<result property="supplierId" column="supplier_id"></result>
+		<result property="supplierName" column="supplier_name"></result>
+		<result property="status" column="status"></result>
+		<result property="invoiceDate" column="invoice_date"></result>
+		<result property="register" column="register"></result>
+		<result property="registerDate" column="register_date"></result>
+	</resultMap>
 </mapper>
