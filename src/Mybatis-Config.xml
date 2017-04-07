@@ -15,6 +15,7 @@
      	<typeAlias alias="Invoice" type="Model.Invoice"/>
      	<typeAlias alias="Department" type="Model.Department"/>
      	<typeAlias alias="Supplier" type="Model.Supplier"/>
+     	
   	</typeAliases>
     <!-- 在spring中配置数据库信息
     <environments default="development">

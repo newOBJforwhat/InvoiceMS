@@ -178,6 +178,42 @@ public class InitDataBases {
 			logger.error("sql错误:"+e.getMessage());
 		}
 	}
+	/**
+	 * 判断是否存在某数据
+	 * @param sql
+	 * @return
+	 */
+	public boolean dataExist(String sql){
+		try {
+			PreparedStatement pst = conn.prepareStatement(sql);
+			logger.debug("sql执行："+sql);
+			ResultSet rset = pst.executeQuery();
+			long id = 0;
+			while(rset.next()){
+				id = rset.getLong("id");
+			}
+			if(id == 0)
+				return false;
+			else
+				return true;
+		} catch (SQLException e) {
+			logger.error("sql错误:"+e.getMessage());
+			return false;
+		}
+	}
+	/**
+	 * 插入数据sql
+	 * @param sql
+	 */
+	public void insertSql(String sql){
+		try {
+			PreparedStatement pst = conn.prepareStatement(sql);
+			logger.debug("sql执行："+sql);
+			pst.execute();
+		} catch (SQLException e) {
+			logger.error("sql错误:"+e.getMessage());
+		}
+	}
 	//获得单例
 	public static InitDataBases getInstance(){
 		return instance;

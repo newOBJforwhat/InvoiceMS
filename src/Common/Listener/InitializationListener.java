@@ -9,8 +9,12 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import Common.InitDataBases;
+import Dao.UserDao;
+import Enum.UserType;
+import Model.User;
 
 /**
  * Application Lifecycle Listener implementation class InitializationListener
@@ -54,7 +58,25 @@ public class InitializationListener implements ServletContextListener {
 		} catch (ClassNotFoundException e) {
 			logger.error("找不到bean："+e.getMessage());;
 		}
+		//添加超级用户
+		String querySql = "select * from User where username = 'admin'";
+		StringBuilder insertSql = new StringBuilder("insert into User(department_id,username,password,name,type,is_deleted) values(");
+		insertSql.append("0,'admin','123456','超级用户',");
+		insertSql.append(UserType.SUPER.getCode());
+		insertSql.append(",0)");
+		if(!initDB.dataExist(querySql)){
+			initDB.insertSql(insertSql.toString());
+		}
 		initDB.closeConn();
+		
+		//录入超级用户
+		User root = new User();
+		root.setUsername("admin");
+		root.setPassword("123456");
+		root.setType(UserType.SUPER.getCode());
+		root.setName("超级用户");
+		root.setDepartmentId(0);
+		root.setIsDeleted(0);
     	/*
     	 * 读取email账号、密码、email地址
     	 */

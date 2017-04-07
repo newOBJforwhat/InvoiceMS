@@ -13,4 +13,5 @@ public interface DepartmentDao {
 	//删除
 	//修改
 	public void alterDepartmentInfo(@Param("id")long id,@Param("name")String name);
+	public void alterPower(@Param("id")long id,@Param("power")String power);
 }

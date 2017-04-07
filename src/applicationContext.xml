@@ -81,10 +81,16 @@
 	<bean id="departmentDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
 		<property name="mapperInterface" value="Dao.DepartmentDao"></property>  
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
+	</bean>
+	<bean id="invoiceDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+		<property name="mapperInterface" value="Dao.InvoiceDao"></property>  
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
 	</bean>  
 	<!--Service config-->
 	<bean id="userService" class="Service.UserService" scope="prototype">
 	</bean>
 	<bean id="departmentService" class="Service.DepartmentService" scope="singleton">
-	</bean>  
+	</bean>
+	 <bean id="invoiceService" class="Service.InvoiceService" scope="prototype">
+	</bean> 
 </beans>
