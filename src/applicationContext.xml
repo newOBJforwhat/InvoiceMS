@@ -26,8 +26,8 @@
             </list>    
         </property>    
     </bean> 
-	<!-- 配置数据源 -->  
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
+	<!-- 配置数据源 使用dbcp连接池-->  
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"  destroy-method="close">  
 		<property name="url"> 
 			<value>${jdbc.url}</value> 
 		</property>  
@@ -38,6 +38,18 @@
 		<property name="password">  
 			<value>${jdbc.password}</value>  
 		</property>
+		<!--maxActive: 最大连接数量-->    
+		<property name="maxActive" value="50"/>  
+		<!--minIdle: 最小空闲连接-->    
+		<property name="minIdle" value="5"/>  
+		<!--maxIdle: 最大空闲连接-->    
+		<property name="maxIdle" value="20"/>  
+		<!--initialSize: 初始化连接-->    
+		<property name="initialSize" value="25"/>
+		<!--removeAbandoned: 是否自动回收超时连接-->    
+        <property name="removeAbandoned"  value="true"/>   
+        <!--maxWait: 超时等待时间以毫秒为单位 1000等于60秒-->  
+        <property name="maxWait" value="1500"/>  
 	</bean>
 	<!-- session工厂 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  

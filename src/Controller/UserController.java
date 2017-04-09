@@ -26,14 +26,6 @@ public class UserController extends OutputStringController{
 	private static Logger logger = Logger.getLogger(UserController.class);
 	
 	/**
-	 * 登录页面
-	 * @return
-	 */
-	@RequestMapping(value="/noNeedLogin/loginPage",produces="text/html;charset=UTF-8")
-	public String loginPage(){
-		return "loginPage";
-	}
-	/**
 	 * 用户登录
 	 * @param session
 	 * @param username
