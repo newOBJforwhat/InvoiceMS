@@ -38,16 +38,6 @@
         </section>
 
         <section class="form-group">
-          <label for="role">职务:</label>
-          <select id="role" class="form-control" name="role" required>
-            <option value="common" selected>普通用户</option>
-            <option value="leader">部门管理</option>
-            <option value="financial">财务</option>
-            <option value="manager">管理员</option>
-          </select>
-        </section>
-
-        <section class="form-group">
           <label for="department">部门:</label>
           <select id="department" class="form-control" name="department" required></select>
         </section>
@@ -106,8 +96,8 @@
       field: 'name',
       title: '姓名'
     }, {
-      field: 'role',
-      title: '角色'
+      field: 'department',
+      title: '部门'
     }, {
       field: 'operation',
       title: '操作'
@@ -115,12 +105,12 @@
     data: [{
       no: 1,
       name: '王大全',
-      role: '财务',
+      department: '研发部',
       operation: '<button class="btn btn-warning" onclick="resetConfirm(this)">重置密码</button>'
     }, {
       no: 2,
       name: '李云龙',
-      role: '普通用户',
+      department: '研发部',
       operation: '<button class="btn btn-warning" onclick="resetConfirm(this)">重置密码</button>'
     }]
   });
