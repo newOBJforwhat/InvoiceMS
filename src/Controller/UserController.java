@@ -35,8 +35,14 @@ public class UserController extends OutputStringController{
 	@RequestMapping(value="/noNeedLogin/login",produces="text/html;charset=UTF-8")
 	@ResponseBody 
 	public String login(HttpSession session,String username,String password){
+		if(username == null)
+			return failure("请填写用户名");
+		if(password == null)
+			return failure("请填写密码");
+		
 		if(getCurrentUser(session) != null)
 			return success("用户已登录");
+		
 		User user = null;
 		try {
 			user = uService.login(username, password);

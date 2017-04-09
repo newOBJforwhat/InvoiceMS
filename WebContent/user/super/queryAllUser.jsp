@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
@@ -17,7 +19,59 @@
   <button class="btn btn-primary" onclick="addUser()">添加用户</button>
 </section>
 <main>
-  <table id="table"></table>
+  <div class="bootstrap-table">
+    <div class="fixed-table-toolbar"></div>
+    <div class="fixed-table-container" style="padding-bottom: 0px;">
+      <div class="fixed-table-header" style="display: none;">
+        <table></table>
+      </div>
+      <div class="fixed-table-body">
+        <div class="fixed-table-loading" style="top: 41px;">正在努力地加载数据中，请稍候……</div>
+        <table id="table" class="table table-hover">
+          <thead>
+          <tr>
+            <th style="" data-field="no">
+              <div class="th-inner ">用户名(工号)</div>
+              <div class="fht-cell"></div>
+            </th>
+            <th style="" data-field="name">
+              <div class="th-inner ">姓名</div>
+              <div class="fht-cell"></div>
+            </th>
+            <th style="" data-field="department">
+              <div class="th-inner ">部门</div>
+              <div class="fht-cell"></div>
+            </th>
+            <th style="" data-field="operation">
+              <div class="th-inner ">操作</div>
+              <div class="fht-cell"></div>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <c:forEach items="${requestScope.users}" var="item"> 
+          <tr data-index="0">
+            <td style="">${item.username}</td>
+            <td style="">${item.name}</td>
+            <td style="">${item.departmentId}</td>
+            <td style="">
+              <button class="btn btn-warning" onclick="resetConfirm(this)">重置密码</button>
+            </td>
+          </tr>
+          </c:forEach>
+          </tbody>
+        </table>
+      </div>
+      <div class="fixed-table-footer" style="display: none;">
+        <table>
+          <tbody>
+          <tr></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="fixed-table-pagination" style="display: none;"></div>
+    </div>
+  </div>
 </main>
 
 <div id="add-user-modal" class="modal fade bs-example-modal-sm in" tabindex="-1">
@@ -33,20 +87,13 @@
           <label for="no">工号:</label>
           <input id="no" class="form-control" type="text" name="no" required>
         </section>
-
+        <section class="form-group">
+          <label for="no">密码:</label>
+          <input id="no" class="form-control" type="password" name="no" required>
+        </section>
         <section class="form-group">
           <label for="name">姓名:</label>
           <input id="name" class="form-control" type="text" name="name" required>
-        </section>
-
-        <section class="form-group">
-          <label for="role">职务:</label>
-          <select id="role" class="form-control" name="role" required>
-            <option value="common" selected>普通用户</option>
-            <option value="leader">部门管理</option>
-            <option value="financial">财务</option>
-            <option value="manager">管理员</option>
-          </select>
         </section>
 
         <section class="form-group">
@@ -97,36 +144,7 @@
 </div>
 <script type="text/javascript" src="../../js/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../../js/bootstrap/bootstrap.min.js"></script>
-<script type="text/javascript" src="../../js/bootstrap/bootstrap-table.min.js"></script>
-<script type="text/javascript" src="../../js/bootstrap/bootstrap-table-zh-CN.min.js"></script>
 <script type="text/javascript">
-  $('#table').bootstrapTable({
-    columns: [{
-      field: 'no',
-      title: '工号'
-    }, {
-      field: 'name',
-      title: '姓名'
-    }, {
-      field: 'role',
-      title: '角色'
-    }, {
-      field: 'operation',
-      title: '操作'
-    }],
-    data: [{
-      no: 1,
-      name: '王大全',
-      role: '财务',
-      operation: '<button class="btn btn-warning" onclick="resetConfirm(this)">重置密码</button>'
-    }, {
-      no: 2,
-      name: '李云龙',
-      role: '普通用户',
-      operation: '<button class="btn btn-warning" onclick="resetConfirm(this)">重置密码</button>'
-    }]
-  });
-
   function addUser() {
     $('#add-user-modal').modal({
       backdrop: 'static',

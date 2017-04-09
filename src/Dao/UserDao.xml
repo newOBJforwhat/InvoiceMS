@@ -18,7 +18,7 @@
 		select id,department_id,username,password,type from User where department_id = #{department} 
 	</select>
 	<select id="findAll" resultMap="UserMap">
-		select * from User order by id desc
+		select * from User order by id 
 	</select>
 	<!--插入-->
 	<insert id="applyUser" parameterType="User" useGeneratedKeys="true" keyProperty="id" >

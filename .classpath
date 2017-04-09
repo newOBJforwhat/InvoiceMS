@@ -54,5 +54,7 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-websocket-4.3.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-dbcp2-2.1.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-pool2-2.4.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jstl.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/standard.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

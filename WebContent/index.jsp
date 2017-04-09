@@ -11,17 +11,17 @@
 <body class="login-body">
 <section class="login-container-bg"></section>
 <section class="login-container">
-  <form onsubmit="login(event)">
+  <form onsubmit="login(event)" method="post" action="/InvoiceMS/user/noNeedLogin/login">
     <header class="login-header">
       <h3>用户登录</h3>
     </header>
     <div class="form-group">
       <label for="username">用户名:</label>
-      <input id="username" class="form-control" type="text" required>
+      <input id="username"  name = "username" class="form-control" type="text" required>
     </div>
     <div class="form-group">
       <label for="password">登录密码:</label>
-      <input id="password" class="form-control" type="password" required>
+      <input id="password"  name = "password" class="form-control" type="password" required>
     </div>
     <footer class="login-footer">
       <label for="remember-me">记住我</label><input id="remember-me" type="checkbox">
@@ -48,6 +48,7 @@
 <script type="text/javascript" src="js/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
 <script type="text/javascript">
+
 </script>
 </body>
 </html>
