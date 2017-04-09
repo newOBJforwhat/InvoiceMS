@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import Common.BusinessErrorException;
 import Common.Controller.OutputStringController;
+import Enum.InvoiceStatus;
 import Form.InvoiceForm;
 import Model.Invoice;
 import Service.InvoiceService;
@@ -59,5 +60,37 @@ public class InvoiceController extends OutputStringController{
 			logger.error("获取本人发票失败："+e.getMessage());
 		}
 		return "myInvoicePage";
+	}
+	/**
+	 * 审核部门页面
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/checked/checkedPage",produces="text/html;charset=UTF-8")
+	public String checkedPage(HttpServletRequest request){
+		List<Invoice> checkedData = null;
+		try{
+			checkedData = iService.getByStatus((InvoiceStatus.CHECKED.getCode()));
+		}catch (Exception e) {
+			logger.error("加载审核部门页面出错:"+e.getMessage());
+		}
+		request.setAttribute("checkedData", checkedData);
+		return "checkedPage";
+	}
+	/**
+	 * 财务部页面
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/finance/financePage",produces="text/html;charset=UTF-8")
+	public String financePage(HttpServletRequest request){
+		List<Invoice> financeData = null;
+		try{
+			financeData = iService.getByStatus((InvoiceStatus.FINANCE.getCode()));
+		}catch (Exception e) {
+			logger.error("加载财务部页面页面出错:"+e.getMessage());
+		}
+		request.setAttribute("financeData", financeData);
+		return "financePage";
 	}
 }

@@ -97,6 +97,7 @@ public class UserController extends OutputStringController{
 		request.setAttribute("departmentMembers", members);
 		return "deparmentMember";
 	}
+	
 	/**
 	 * 申请用户
 	 * @param form

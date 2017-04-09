@@ -41,4 +41,10 @@ public class InvoiceService {
 		List<Invoice> results = iDao.findByUserId(userid);
 		return results;
 	}
+	
+	@Transactional(rollbackFor=Exception.class,readOnly = true, propagation = Propagation.REQUIRED,timeout=15)
+	public List<Invoice> getByStatus(int status){
+		List<Invoice> results = iDao.findByStatus(status);
+		return results;
+	}
 }

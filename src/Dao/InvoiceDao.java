@@ -11,5 +11,6 @@ public interface InvoiceDao {
 	//查找
 	public Invoice findByNumber(String invoiceNumber);
 	public List<Invoice> findByUserId(long userid);
+	public List<Invoice> findByStatus(int status);
 	//修改
 }

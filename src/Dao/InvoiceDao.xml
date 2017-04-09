@@ -11,8 +11,11 @@
 	<select id = "findByNumber" resultMap="InvoiceMap">
 		select * from Invoice where id = #{id}
 	</select>
-	<select id="findByUserId" resultMap="InvoiceMap">
+	<select id = "findByUserId" resultMap="InvoiceMap">
 		select * from Invoice where register = #{userid}
+	</select>
+	<select id = "findByStatus" resultMap="InvoiceMap">
+		select * from Invoice where status = #{status}
 	</select>
 	<resultMap type="Invoice" id="InvoiceMap">
 		<id property="id" column="id"></id>
