@@ -1,4 +1,5 @@
 /build/
 /.idea
-/node_modules
+front-end/.idea
+front-end/node_modules
 /.settings
