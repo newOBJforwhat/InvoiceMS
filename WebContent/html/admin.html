@@ -15,7 +15,65 @@
   <button class="btn btn-primary" onclick="addUser()">添加用户</button>
 </section>
 <main>
-  <table id="table"></table>
+  <div class="bootstrap-table">
+    <div class="fixed-table-toolbar"></div>
+    <div class="fixed-table-container" style="padding-bottom: 0px;">
+      <div class="fixed-table-header" style="display: none;">
+        <table></table>
+      </div>
+      <div class="fixed-table-body">
+        <div class="fixed-table-loading" style="top: 41px;">正在努力地加载数据中，请稍候……</div>
+        <table id="table" class="table table-hover">
+          <thead>
+          <tr>
+            <th style="" data-field="no">
+              <div class="th-inner ">工号</div>
+              <div class="fht-cell"></div>
+            </th>
+            <th style="" data-field="name">
+              <div class="th-inner ">姓名</div>
+              <div class="fht-cell"></div>
+            </th>
+            <th style="" data-field="department">
+              <div class="th-inner ">部门</div>
+              <div class="fht-cell"></div>
+            </th>
+            <th style="" data-field="operation">
+              <div class="th-inner ">操作</div>
+              <div class="fht-cell"></div>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr data-index="0">
+            <td style="">1</td>
+            <td style="">王大全</td>
+            <td style="">研发部</td>
+            <td style="">
+              <button class="btn btn-warning" onclick="resetConfirm(this)">重置密码</button>
+            </td>
+          </tr>
+          <tr data-index="1">
+            <td style="">2</td>
+            <td style="">李云龙</td>
+            <td style="">研发部</td>
+            <td style="">
+              <button class="btn btn-warning" onclick="resetConfirm(this)">重置密码</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="fixed-table-footer" style="display: none;">
+        <table>
+          <tbody>
+          <tr></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="fixed-table-pagination" style="display: none;"></div>
+    </div>
+  </div>
 </main>
 
 <div id="add-user-modal" class="modal fade bs-example-modal-sm in" tabindex="-1">
@@ -85,36 +143,7 @@
 </div>
 <script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../js/bootstrap/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/bootstrap/bootstrap-table.min.js"></script>
-<script type="text/javascript" src="../js/bootstrap/bootstrap-table-zh-CN.min.js"></script>
 <script type="text/javascript">
-  $('#table').bootstrapTable({
-    columns: [{
-      field: 'no',
-      title: '工号'
-    }, {
-      field: 'name',
-      title: '姓名'
-    }, {
-      field: 'department',
-      title: '部门'
-    }, {
-      field: 'operation',
-      title: '操作'
-    }],
-    data: [{
-      no: 1,
-      name: '王大全',
-      department: '研发部',
-      operation: '<button class="btn btn-warning" onclick="resetConfirm(this)">重置密码</button>'
-    }, {
-      no: 2,
-      name: '李云龙',
-      department: '研发部',
-      operation: '<button class="btn btn-warning" onclick="resetConfirm(this)">重置密码</button>'
-    }]
-  });
-
   function addUser() {
     $('#add-user-modal').modal({
       backdrop: 'static',
