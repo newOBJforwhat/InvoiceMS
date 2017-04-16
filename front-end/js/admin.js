@@ -1,9 +1,7 @@
 function admin() {
   'use strict';
 
-  $('<section class="admin-bar">' +
-    '<button class="btn btn-primary" id="add-user-btn">添加用户</button>' +
-    '</section>').insertAfter('.global-header');
+  $('.main').prepend($('<section class="admin-bar"><button class="btn btn-primary" id="add-user-btn">添加用户</button></section>'));
   $('#add-user-btn').click(addUser);
 
   if (!$('#add-user-modal').length) {
@@ -65,26 +63,7 @@ function admin() {
     $('body').append($resetConfirmModal)
   }
 
-  if (!$('#fail-modal').length) {
-    var $failModal = $(
-      ['<div id="fail-modal" class="modal fade bs-example-modal-sm in" tabindex="-1">',
-        '  <div class="modal-dialog modal-sm" role="document">',
-        '    <div class="modal-content">',
-        '      <div class="modal-header">',
-        '        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>',
-        '        </button>',
-        '        <h4 class="modal-title">提交失败</h4>',
-        '      </div>',
-        '      <div class="modal-body">',
-        '        提交失败, 请重试, 多次失败请联系管理员',
-        '      </div>',
-        '    </div>',
-        '  </div>',
-        '</div>'].join('')
-    );
-    $('body').append($failModal)
-  }
-
+  $('#table-container').html('<table id="table"></table>');
   var $table = $('#table');
   $table.bootstrapTable({
     columns: [{

@@ -78,7 +78,9 @@ h5 {
 }
 
 .main {
-  margin-left: 240px;
+  float: left;
+  margin-left: 10px;
+  width: calc(100% - 220px);
 }
 
 
