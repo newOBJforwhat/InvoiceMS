@@ -1,0 +1,164 @@
+@CHARSET "UTF-8";
+
+html,
+body {
+  height: 100%;
+}
+
+.login-body {
+  background-size: cover;
+  background-image: url("../../img/login-background.jpg");
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+  padding: 0;
+}
+
+.login-container-bg {
+  position: absolute;
+  top: 25%;
+  right: 120px;
+  width: 400px;
+  height: 265px;
+  background: white;
+  opacity: 0.4;
+  border-radius: 5px;
+}
+
+.login-container {
+  position: absolute;
+  top: 25%;
+  right: 120px;
+  padding: 20px 40px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  width: 400px;
+}
+
+.login-container .login-header {
+  margin-bottom: 15px;
+}
+
+.login-container .login-footer {
+  padding-right: 30px;
+  text-align: end;
+}
+
+#remember-me {
+  margin: 0 10px;
+}
+
+.global-header {
+  position: relative;
+  background-color: #5bc0de;
+  color: white;
+  padding: 20px;
+}
+
+.global-header .welcome-info {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.global-header .welcome-info .username {
+  cursor: pointer;
+}
+
+.menu-left-bar {
+  float: left;
+  width: 200px;
+  height: 100%;
+  border-right: 1px solid black;
+}
+
+.menu-left-bar .menu-list {
+  list-style: none;
+}
+
+.menu-left-bar .menu-item {
+  background-color: #e1edfa;
+  padding-left: 20px;
+  font-size: 20px;
+  line-height: 48px;
+  margin: 0 0 5px 20%;
+  width: 80%;
+  transition-duration: 0.35s;
+}
+
+.menu-left-bar .menu-item:hover {
+  margin-left: 0 !important;
+  transition-duration: 0.35s;
+  width: 100%;
+}
+
+.menu-left-bar .menu-item.active {
+  transition-duration: 0s;
+  margin-left: 0 !important;
+  width: 100%;
+  color: #000000;
+  border-left: 5px solid #1989fa;
+}
+
+.menu-left-bar .menu-item a {
+  display: block;
+  color: #8d9199
+}
+
+.main {
+  float: left;
+  margin-left: 10px;
+  width: calc(100% - 220px);
+}
+
+.type-in-form {
+  margin: 50px;
+  padding: 20px;
+  border: 1px grey solid;
+  border-radius: 5px;
+}
+
+.type-in-form .form-header {
+  margin-bottom: 15px;
+}
+
+.type-in-form .form-footer {
+  margin-top: 20px;
+  padding-right: 20px;
+  text-align: end;
+}
+
+.type-in-form .form-footer .submit-button {
+  width: 80px;
+}
+
+.preview-list-table {
+  width: 80%;
+  margin: 20px;
+}
+
+.preview-list-table th, td {
+  line-height: 40px;
+  font-size: 20px;
+  border: 1px solid black;
+  padding: 0 5px;
+}
+
+.preview-list-table th {
+  text-align: center;
+}
+
+.admin-bar {
+  position: absolute;
+  padding: 20px 10px;
+}
+
+#table-container {
+  padding: 10px;
+}
