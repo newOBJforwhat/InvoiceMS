@@ -24,8 +24,8 @@ function admin() {
       '          <input id="name" class="form-control" type="text" name="name" required>',
       '        </section>',
       '        <section class="form-group">',
-      '          <label for="department">部门:</label>',
-      '          <select id="department" class="form-control" name="department" required></select>',
+      '          <label for="role">角色:</label>',
+      '          <select id="role" class="form-control" name="department" required></select>',
       '        </section>',
       '      </div>',
       '      <div class="modal-footer">',
@@ -66,6 +66,7 @@ function admin() {
   $('#table-container').html('<table id="table"></table>');
   var $table = $('#table');
   $table.bootstrapTable({
+    search: true,
     columns: [{
       field: 'no',
       title: '工号'
@@ -73,8 +74,8 @@ function admin() {
       field: 'name',
       title: '姓名'
     }, {
-      field: 'department',
-      title: '部门'
+      field: 'role',
+      title: '角色'
     }, {
       field: 'operation',
       title: '操作'
@@ -82,12 +83,12 @@ function admin() {
     data: [{
       no: 1,
       name: '王大全',
-      department: '研发部',
+      role: '录入员',
       operation: '<button class="btn btn-warning reset-password">重置密码</button>'
     }, {
       no: 2,
       name: '李云龙',
-      department: '研发部',
+      role: '录入员',
       operation: '<button class="btn btn-warning reset-password">重置密码</button>'
     }]
   });
@@ -107,18 +108,11 @@ function admin() {
    * 获取部门列表
    */
   (function () {
-    $.get('/departments')
-      .done(function (data) {
-        data.forEach(function (department) {
-          $('#department').append('<option>' + department + '</option>')
-        });
-      });
-
     // 测试代码
-    var data = ['研发部', '测试部', '人力资源部', '保安部'];
+    var data = ['普通用户', '部门审核', '财务'];
 
     data.forEach(function (department) {
-      $('#department').append('<option>' + department + '</option>')
+      $('#role').append('<option>' + department + '</option>')
     });
   })();
 

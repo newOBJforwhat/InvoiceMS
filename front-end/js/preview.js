@@ -2,6 +2,7 @@ function preview (utils) {
   $('#table-container').html('<table id="table"></table>');
   var $table = $('#table');
   $table.bootstrapTable({
+    search: true,
     columns: [{
       field: 'invoiceId',
       title: '发票号'

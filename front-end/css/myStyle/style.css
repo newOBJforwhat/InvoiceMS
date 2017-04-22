@@ -155,7 +155,8 @@ h5 {
 }
 
 .admin-bar {
-  padding: 10px;
+  position: absolute;
+  padding: 20px 10px;
 }
 
 #table-container {

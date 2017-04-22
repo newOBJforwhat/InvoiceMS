@@ -1,26 +1,35 @@
 function verify(utils) {
   $('#table-container').html('<table id="table"></table>');
   var $table = $('#table');
+
+  var tableColumns = [{
+    field: 'invoiceId',
+    title: '发票号'
+  }, {
+    field: 'user',
+    title: '录入者'
+  }, {
+    field: 'money',
+    title: '金额'
+  }, {
+    field: 'supplierName',
+    title: '供应商名字'
+  }, {
+    field: 'date',
+    title: '开票日期'
+  }, {
+    field: 'operation',
+    title: '操作'
+  }];
+
+  var type = '';
+  if (type === 'financial') {
+    tableColumns.splice(tableColumns.length - 2, 0, {field: 'auditing', title: '经办人'})
+  }
+
   $table.bootstrapTable({
-    columns: [{
-      field: 'invoiceId',
-      title: '发票号'
-    }, {
-      field: 'user',
-      title: '录入者'
-    }, {
-      field: 'money',
-      title: '金额'
-    }, {
-      field: 'supplierName',
-      title: '供应商名字'
-    }, {
-      field: 'date',
-      title: '开票日期'
-    }, {
-      field: 'operation',
-      title: '操作'
-    }],
+    search: true,
+    columns: tableColumns,
     data: [{
       invoiceId: '23213213',
       user: '大锤',
@@ -56,10 +65,24 @@ function verify(utils) {
   });
 
   function pass() {
-    $(this).parent().html('已通过');
+    var self = this;
+    var modal = $('#small-modal');
+    modal.modal();
+    modal.find('.modal-body').text('是否确认通过审核');
+    modal.find('.submit-button').get(0).onclick = function () {
+      modal.modal('hide');
+      $(self).parent().html('已通过');
+    };
   }
 
   function reject() {
-    $(this).parent().html('已驳回');
+    var self = this;
+    var modal = $('#small-modal');
+    modal.modal();
+    modal.find('.modal-body').text('是否确认驳回审核');
+    modal.find('.submit-button').get(0).onclick = function () {
+      modal.modal('hide');
+      $(self).parent().html('已驳回');
+    };
   }
 }
