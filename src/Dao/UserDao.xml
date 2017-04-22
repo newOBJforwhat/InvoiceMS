@@ -8,28 +8,24 @@
 		select * from User where id = #{id}
 	</select>
 	<select id="findByUsernameAndPassword" resultMap="UserMap" useCache="true">
-		select id,department_id,username,password,type from User where username = #{username} 
+		select id,username,password,type from User where username = #{username} 
 		and password = #{password}
 	</select>
 	<select id="findByUsername" resultMap="UserMap">
-		select id,department_id,username,password,type from User where username = #{username} 
-	</select>
-	<select id="findByDepartment" resultMap="UserMap">
-		select id,department_id,username,password,type from User where department_id = #{department} 
+		select id,username,password,type from User where username = #{username} 
 	</select>
 	<select id="findAll" resultMap="UserMap">
 		select * from User order by id 
 	</select>
 	<!--插入-->
 	<insert id="applyUser" parameterType="User" useGeneratedKeys="true" keyProperty="id" >
-		insert into User(department_id,username,password,name,type,is_deleted) 
-		values(#{departmentId},#{username},#{password},#{name},#{type},#{isDeleted})
+		insert into User(username,password,name,type,is_deleted) 
+		values(#{username},#{password},#{name},#{type},#{isDeleted})
 	</insert>
 	<!--更新-->
 	<update id="updateInfo" >
         update User
         <set>
-            <if test="departmentId != 0">department_id=#{departmentId},</if>
             <if test="#{name} != null">name=#{name},</if>
         </set>
         where id=#{id}
@@ -46,7 +42,6 @@
 	</delete>
 	<resultMap type="User" id="UserMap">
 		<id property="id" column="id"></id>
-		<result property="departmentId" column="department_id"></result>
 		<result property="name" column="name"></result>
 		<result property="username" column="username"></result>
 		<result property="password" column="password"></result>

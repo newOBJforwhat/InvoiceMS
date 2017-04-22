@@ -3,16 +3,11 @@ package Common.Listener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import Common.InitDataBases;
-import Dao.UserDao;
 import Enum.UserType;
 import Model.User;
 
@@ -75,7 +70,7 @@ public class InitializationListener implements ServletContextListener {
 		root.setPassword("123456");
 		root.setType(UserType.SUPER.getCode());
 		root.setName("超级用户");
-		root.setDepartmentId(0);
+//		root.setDepartmentId(0);
 		root.setIsDeleted(0);
     	/*
     	 * 读取email账号、密码、email地址

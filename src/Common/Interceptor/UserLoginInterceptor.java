@@ -20,7 +20,7 @@ public class UserLoginInterceptor implements HandlerInterceptor{
 	public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)
 			throws Exception {
 	}
-	//
+			
 	@Override
 	public void postHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, ModelAndView arg3)
 			throws Exception {
@@ -30,16 +30,18 @@ public class UserLoginInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2) throws Exception {
 		logger.debug("用户登录拦截器的前置方法.....");
+		
 		HttpSession session = arg0.getSession();
 		User u = (User)session.getAttribute(CommonInfo.userInfo);
 		if(u == null)
 		{
 			logger.debug("用户未登录");
-			arg1.sendRedirect("/"+CommonInfo.projName+"/index");
+			arg1.setStatus(401);
 			return false;
 		}
 		else
 			logger.debug("用户已登录:"+u.getUsername());
+		
 		return true;
 	}
 }

@@ -1,7 +1,6 @@
 package Controller;
 
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import Common.CommonInfo;
 import Common.Controller.OutputStringController;
@@ -16,6 +16,8 @@ import Enum.UserType;
 import Form.ApplyUserForm;
 import Model.User;
 import Service.UserService;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 @Scope("request")
@@ -32,7 +34,7 @@ public class UserController extends OutputStringController{
 	 * @param password
 	 * @return
 	 */
-	@RequestMapping(value="/noNeedLogin/login",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/noNeedLogin/login",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
 	@ResponseBody 
 	public String login(HttpSession session,String username,String password){
 		if(username == null)
@@ -52,7 +54,12 @@ public class UserController extends OutputStringController{
 		}
 		if (user != null) {
 			session.setAttribute(CommonInfo.userInfo, user);
-			return success("登录成功");
+			//返回用户信息
+			JSONObject userinfo = new JSONObject();
+			userinfo.put("username", user.getUsername());
+			userinfo.put("name", user.getName());
+			userinfo.put("type", user.getType());
+			return resultSuccess("登录成功", userinfo.toString());
 		}
 		return failure("不存在此用户");
 	}
@@ -60,7 +67,7 @@ public class UserController extends OutputStringController{
 	 * 登出方法
 	 * @param session
 	 */
-	@RequestMapping(value="/logout",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/logout",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
 	@ResponseBody
 	public String logout(HttpSession session){
 		session.setAttribute(CommonInfo.userInfo, null);
@@ -71,7 +78,7 @@ public class UserController extends OutputStringController{
 	 * @param username
 	 * @return
 	 */
-	@RequestMapping(value="/noNeedLogin/validateUser/{username}",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/noNeedLogin/validateUser/{username}",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
 	@ResponseBody 
 	public String validateUser(@PathVariable("username")String username){
 		User u = null;
@@ -86,30 +93,13 @@ public class UserController extends OutputStringController{
 		else
 			return success("用户已存在");
 	}
-	/**
-	 * 查询部门成员
-	 * @param request
-	 * @param departmentId
-	 * @return
-	 */
-	@RequestMapping(value="/deparmentMember/{departmentId}",produces="text/html;charset=UTF-8")
-	public String departmentMember(HttpServletRequest request,@PathVariable("departmentId")long departmentId){
-		List<User> members = null;
-		try{
-			members = uService.departmentMembers(departmentId);
-		}catch (Exception e) {
-			logger.error("查询部门成员出错:"+e.getMessage());
-		}
-		request.setAttribute("departmentMembers", members);
-		return "deparmentMember";
-	}
 	
 	/**
 	 * 申请用户
 	 * @param form
 	 * @return
 	 */
-	@RequestMapping(value="/super/applyUser",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/super/applyUser",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
 	@ResponseBody 
 	public String applyUser(ApplyUserForm form){
 		//后端校验
@@ -123,11 +113,10 @@ public class UserController extends OutputStringController{
 			return failure("密码位数须在6-30位");
 		else if(form.getName() == null || form.getName().equals(""))
 			return failure("填写用户名字");
-		else if(form.getDepartmentId() == 0)
-			return failure("选择部门");
+//		else if(form.getDepartmentId() == 0)
+//			return failure("选择部门");
 		
 		form.setCreateTime(System.currentTimeMillis());
-		form.setType(UserType.NORMAL.getCode());
 		try{
 			if(uService.applyUser(form) != 0)
 				return success("申请成功");
@@ -140,21 +129,13 @@ public class UserController extends OutputStringController{
 	}
 	
 	/**
-	 * 请求更新用户信息页面
-	 * @return
-	 */
-	@RequestMapping(value="/updateInfoPage",produces="text/html;charset=UTF-8")
-	public String updateInfoPage(){
-		return "updateUserInfoPage";
-	}
-	/**
 	 * 修改密码接口
 	 * @param session
 	 * @param password
 	 * @param passwordAgain
 	 * @return
 	 */
-	@RequestMapping(value="/alterPassword",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/alterPassword",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
 	@ResponseBody
 	public String alterPassword(HttpSession session,String password,String passwordAgain){
 		if (!password.equals(passwordAgain))
@@ -171,37 +152,24 @@ public class UserController extends OutputStringController{
 		}
 	}
 	/**
-	 * 修改密码页面
-	 * @return
-	 */
-	@RequestMapping(value="/alterPasswordPage",produces="text/html;charset=UTF-8")
-	public String alterPassword(){
-		return "alterPasswordPage";
-	}
-	/**
 	 * 更新用户信息接口
 	 * @param session
 	 * @param name
 	 * @param departmentId
 	 * @return
 	 */
-	@RequestMapping(value="/updateInfo",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/updateInfo",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
 	@ResponseBody 
-	public String updateInfo(HttpSession session,String name,long departmentId){
+	public String updateInfo(HttpSession session,String name){
 		User u = getCurrentUser(session);
 		String tname = name;
-		long tdepartmentId = departmentId;
 		int control = 0;
 		if(tname == null || tname.equals("")){
 			tname = u.getName();
 			control = control + 1;
 		}
-		if(tdepartmentId == 0){
-			tdepartmentId = u.getDepartmentId();
-			control = control + 1;
-		}
-		if(control != 2)
-			uService.updateUserInfo(u.getId(), tname, tdepartmentId);
+		if(control != 1)
+			uService.updateUserInfo(u.getId(), tname);
 		return success("更新成功");
 	}
 	/**
@@ -210,7 +178,7 @@ public class UserController extends OutputStringController{
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="/super/deleteUser/{id}",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/super/deleteUser/{id}",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
 	@ResponseBody 
 	public String deleteUser(@PathVariable("id")long id){
 		try{
@@ -224,14 +192,37 @@ public class UserController extends OutputStringController{
 		}
 		return success("删除成功");
 	}
-	
+	/**
+	 * 超级用户查询所有接口
+	 * @return
+	 */
+	@RequestMapping(value="/super/queryUser",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
+	@ResponseBody
+	public String queryUser(){
+		try{
+			List<User> userData = uService.findAll();
+			JSONArray userArr = new JSONArray();
+			for(User u : userData){
+				JSONObject userjson = new JSONObject();
+				userjson.put("username", u.getUsername());
+				userjson.put("name", u.getName());
+				userjson.put("type", u.getType());
+				userArr.add(userjson);
+			}
+			return resultSuccess("返回成功", userArr.toString());
+		}catch (Exception e) {
+			logger.error("查询错误:"+e.getMessage());
+			return failure("查询错误");
+		}
+		
+	}
 	/**
 	 * 软删除，把状态改为1
 	 * @param session
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="/super/softDelete/{id}",produces="text/html;charset=UTF-8")
+	@RequestMapping(value="/super/softDelete/{id}",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
 	@ResponseBody 
 	public String softDelete(@PathVariable("id")long id){
 		try{
@@ -242,19 +233,20 @@ public class UserController extends OutputStringController{
 		}
 		return success("软删除成功");
 	}
+	
 	/**
-	 * 查询所有用户页面
-	 * @param request
+	 * 返回所有用户类型
 	 * @return
 	 */
-	@RequestMapping(value="/super/queryAllUser",produces="text/html;charset=UTF-8")
-	public String queryAllUserPage(HttpServletRequest request){
-		try{
-			List<User> users = uService.findAll();
-			request.setAttribute("users", users);
-		}catch (Exception e) {
-			logger.error("查询所有user错误");
-		}
-		return "queryAllUser";
+	@RequestMapping(value="/super/getType",produces="text/html;charset=UTF-8",method=RequestMethod.GET)
+	@ResponseBody 
+	public String getUserType(){
+		JSONObject jsonResult  = new JSONObject();
+		jsonResult.put(UserType.SUPER.getCode(), UserType.SUPER.getName());
+		jsonResult.put(UserType.STAFF.getCode(), UserType.STAFF.getName());
+		jsonResult.put(UserType.AUDITING.getCode(), UserType.AUDITING.getName());
+		jsonResult.put(UserType.FINANCE.getCode(), UserType.FINANCE.getName());
+		return resultSuccess("success", jsonResult.toString());
 	}
+	
 }

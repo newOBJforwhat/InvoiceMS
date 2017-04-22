@@ -32,7 +32,7 @@ public class SuperUserInterceptor implements HandlerInterceptor{
 		if(u.getType() != UserType.SUPER.getCode())
 		{
 			logger.debug("非超级用户无法访问");
-			arg1.sendRedirect("/"+CommonInfo.projName+"/index");
+			arg1.setStatus(401);
 			return false;
 		}
 		else

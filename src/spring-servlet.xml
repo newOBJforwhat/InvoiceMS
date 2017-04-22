@@ -22,7 +22,7 @@
         <!-- 前缀 -->
         <property name="prefix" value="" />
         <!-- 后缀 -->
-        <property name="suffix" value=".jsp" />
+        <property name="suffix" value="" />
     </bean>
     <!--配置拦截器-->
     <mvc:interceptors>

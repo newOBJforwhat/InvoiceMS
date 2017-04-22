@@ -7,7 +7,9 @@ package Enum;
  */
 public enum UserType {
 	SUPER(0,"超级用户"),
-	NORMAL(1,"普通用户"),
+	STAFF(1,"录入员"),
+	AUDITING(2,"审核员"),
+	FINANCE(3,"财务"),
 	;
 	private int code;
 	private String name;

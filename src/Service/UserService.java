@@ -51,16 +51,11 @@ public class UserService {
 		System.out.println(u);
 		return u ;
 	}
-	@Transactional(rollbackFor=Exception.class,readOnly = true, propagation = Propagation.REQUIRED,timeout=15)
-	public List<User> departmentMembers(long departmentId){
-		List<User> dmembers =  uDao.findByDepartment(departmentId);
-		return dmembers ;
-	}
 	@Transactional(rollbackFor=Exception.class,readOnly = false, propagation = Propagation.REQUIRED,timeout=15)
 	public long applyUser(ApplyUserForm form){
 		User u = new User();
 		u.setId(0);
-		u.setDepartmentId(form.getDepartmentId());
+//		u.setDepartmentId(form.getDepartmentId());
 		u.setName(form.getName());
 		u.setPassword(form.getPassword());
 		u.setType(form.getType());
@@ -72,8 +67,8 @@ public class UserService {
 		return u.getId();
 	}
 	@Transactional(rollbackFor=Exception.class,readOnly = false, propagation = Propagation.REQUIRED,timeout=15)
-	public void updateUserInfo(long id,String name,long departmentId){
-		uDao.updateInfo(id, departmentId, name);
+	public void updateUserInfo(long id,String name){
+		uDao.updateInfo(id, name);
 	}
 	@Transactional(rollbackFor=Exception.class,readOnly = false, propagation = Propagation.REQUIRED,timeout=15)
 	public void deleteUser(long id){

@@ -4,14 +4,14 @@ public class ApplyUserForm {
 	/**
 	 * 填入 username，password，name
 	 */
-	private long departmentId;
+//	private long departmentId;
 	private String username;
 	private String password;
 	private String name;
+	private int type;
 	/**
 	 * 系统生成
 	 */
-	private int type;
 	private long createTime;
 	
 	public String getUsername() {
@@ -32,12 +32,12 @@ public class ApplyUserForm {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public long getDepartmentId() {
-		return departmentId;
-	}
-	public void setDepartmentId(long departmentId) {
-		this.departmentId = departmentId;
-	}
+//	public long getDepartmentId() {
+//		return departmentId;
+//	}
+//	public void setDepartmentId(long departmentId) {
+//		this.departmentId = departmentId;
+//	}
 	public int getType() {
 		return type;
 	}

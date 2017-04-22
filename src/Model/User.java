@@ -15,8 +15,8 @@ public class User {
 	@PrimaryKey
 	@AutoIncrement
 	private long id;
-	@Column("department_id")
-	private long departmentId;
+//	@Column("department_id")
+//	private long departmentId;
 	private String username;
 	private String password;
 	private String name;
@@ -47,12 +47,12 @@ public class User {
 	public void setType(int type) {
 		this.type = type;
 	}
-	public long getDepartmentId() {
-		return departmentId;
-	}
-	public void setDepartmentId(long departmentId) {
-		this.departmentId = departmentId;
-	}
+//	public long getDepartmentId() {
+//		return departmentId;
+//	}
+//	public void setDepartmentId(long departmentId) {
+//		this.departmentId = departmentId;
+//	}
 	public String getName() {
 		return name;
 	}
