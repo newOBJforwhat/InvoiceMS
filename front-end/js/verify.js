@@ -68,21 +68,27 @@ function verify(utils) {
     var self = this;
     var modal = $('#small-modal');
     modal.modal();
-    modal.find('.modal-body').text('是否确认通过审核');
-    modal.find('.submit-button').get(0).onclick = function () {
-      modal.modal('hide');
-      $(self).parent().html('已通过');
-    };
+    utils.setModal(modal, {
+      header: '通过确认',
+      body: '是否确认通过审核',
+      confirm: function () {
+        modal.modal('hide');
+        $(self).parent().html('已通过');
+      }
+    });
   }
 
   function reject() {
     var self = this;
     var modal = $('#small-modal');
     modal.modal();
-    modal.find('.modal-body').text('是否确认驳回审核');
-    modal.find('.submit-button').get(0).onclick = function () {
-      modal.modal('hide');
-      $(self).parent().html('已驳回');
-    };
+    utils.setModal(modal, {
+      header: '驳回确认',
+      body: '是否确认驳回审核',
+      confirm: function () {
+        modal.modal('hide');
+        $(self).parent().html('已驳回');
+      }
+    });
   }
 }

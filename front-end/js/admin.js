@@ -1,4 +1,4 @@
-function admin() {
+function admin(utils) {
   'use strict';
 
   $('.main').prepend($('<section class="admin-bar"><button class="btn btn-primary" id="add-user-btn">添加用户</button></section>'));
@@ -37,30 +37,6 @@ function admin() {
       '</div>'].join(''));
     $addUserModal.find('form').get(0).onsubmit = submitAdd;
     $('body').append($addUserModal);
-  }
-
-  if (!$('#reset-confirm').length) {
-    var $resetConfirmModal = $(
-      ['<div id="reset-confirm" class="modal fade bs-example-modal-sm in" tabindex="-1">',
-        '  <div class="modal-dialog modal-sm" role="document">',
-        '    <div class="modal-content">',
-        '      <div class="modal-header">',
-        '        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>',
-        '        </button>',
-        '        <h4 class="modal-title">重置确认</h4>',
-        '      </div>',
-        '      <div class="modal-body">',
-        '        工号为<span id="reset-confirm-no"></span>用户<span id="reset-confirm-name"></span>的密码将会被重置为123456',
-        '      </div>',
-        '      <div class="modal-footer">',
-        '        <button class="btn btn-primary">确认</button>',
-        '      </div>',
-        '    </div>',
-        '  </div>',
-        '</div>'].join('')
-    );
-    $resetConfirmModal.find('.modal-footer > button').click(resetPassword);
-    $('body').append($resetConfirmModal)
   }
 
   $('#table-container').html('<table id="table"></table>');
@@ -137,17 +113,21 @@ function admin() {
   }
 
   function resetConfirm() {
-    $('#reset-confirm').modal();
+    var modal = $('#small-modal');
+    modal.modal();
     var no = $(this).parent().parent().find('td').get(0).innerHTML;
     var name = $(this).parent().parent().find('td').get(1).innerHTML;
 
-    $('#reset-confirm-no').text(no);
-    $('#reset-confirm-name').text(name);
+    utils.setModal(modal, {
+      header: '重置确认',
+      body: '工号为' + no + '用户' + name + '的密码将会被重置为123456',
+      confirm: resetPassword.bind(null, no)
+    });
   }
 
-  function resetPassword() {
+  function resetPassword(no) {
     $.post('/user/reset', {
-      no: $('#reset-confirm-no').text()
+      no: no
     })
       .done(function () {
         location.href = 'success.html';
