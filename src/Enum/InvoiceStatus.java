@@ -4,6 +4,7 @@ public enum InvoiceStatus {
 	ENTERING(1,"录入"),
 	CHECKED(2,"业务审核"),
 	FINANCE(3,"财务审核"),
+	FINAL(4,"终了"),
 	;
 	
 	private int code;

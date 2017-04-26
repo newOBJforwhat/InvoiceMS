@@ -17,6 +17,16 @@
 	<select id = "findByStatus" resultMap="InvoiceMap">
 		select * from Invoice where status = #{status}
 	</select>
+	<select id = "findLikeNumbersorSupplierName" resultMap="InvoiceMap">
+		select * from Invoice where invoice_number like %#{invoiceNumber}% or supplier_name like %#{supplierName}%
+	</select>
+	<!--修改-->
+	<update id = "enterPass">
+		update Invoice set status = #{status} where id = #{id}
+	</update>
+	<update id = "updateInvoiceInfo">
+		update Invoice set money = #{money},supplier_id = #{supplierId} ,supplier_name = #{supplierName} , invoice_date = #{invoiceDate} where id = #{id}
+	</update>
 	<resultMap type="Invoice" id="InvoiceMap">
 		<id property="id" column="id"></id>
 		<result property="invoiceNumber" column="invoice_number"></result>

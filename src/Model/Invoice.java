@@ -27,6 +27,8 @@ public class Invoice {
 	private long register;//是谁录入
 	@Column("register_date")
 	private long registerDate;//录入时间
+	@Column("is_deleted")
+	private int isDeleted;
 	public long getId() {
 		return id;
 	}
@@ -81,4 +83,11 @@ public class Invoice {
 	public void setRegisterDate(long registerDate) {
 		this.registerDate = registerDate;
 	}
+	public int getIsDeleted() {
+		return isDeleted;
+	}
+	public void setIsDeleted(int isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	
 }

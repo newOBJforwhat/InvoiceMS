@@ -1,8 +1,8 @@
 package Enum;
 
 public enum DeleteCode {
-	UNDELETED(0,"已删除"),
-	DELETED(1,"未删除"),
+	UNDELETED(0,"未删除"),
+	DELETED(1,"已删除"),
 	;
 	private int code;
 	private String name;
