@@ -1,4 +1,6 @@
 function preview (utils) {
+  'use strict'
+
   $('#table-container').html('<table id="table"></table>');
   var $table = $('#table');
   $table.bootstrapTable({

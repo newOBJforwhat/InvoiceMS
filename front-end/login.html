@@ -23,7 +23,7 @@
       <input id="password" class="form-control" type="password" required>
     </div>
     <footer class="login-footer">
-      <label for="remember-me">记住我</label><input id="remember-me" type="checkbox">
+      <!--<label for="remember-me">记住我</label><input id="remember-me" type="checkbox">-->
       <button class="btn btn-primary" type="submit">登录</button>
     </footer>
   </form>
@@ -49,15 +49,31 @@
   function login(e) {
     e.preventDefault();
 
-    $.post('/login', {
+    var $alertModal = $('#alert-modal');
+    var type = [
+      'admin',
+      'input',
+      'verify&&department',
+      'verify&&financial'
+    ]
+
+    $.post('http://120.25.125.43:8080/InvoiceMS/user/noNeedLogin/login', {
       username: $('#username').val(),
       password: $('#password').val()
     })
-      .done(function (type) {
-        location.href = 'index.html?type=' + type
+      .done(function (resp) {
+        resp = JSON.parse(resp)
+        if (resp.status === 1) {
+          sessionStorage.setItem('username', resp.result.username)
+          sessionStorage.setItem('type', resp.result.type)
+          sessionStorage.setItem('name', resp.result.name)
+          location.href = 'index.html?type=' + type[resp.result.type]
+        } else {
+          $alertModal.find('.modal-body').html(resp.info)
+          $alertModal.modal();
+        }
       })
       .fail(function () {
-        var $alertModal = $('#alert-modal');
         $alertModal.find('.modal-body').html('登录失败, 请重试, 多次失败请联系管理员');
         $alertModal.modal();
       });

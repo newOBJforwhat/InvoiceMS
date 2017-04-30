@@ -1,4 +1,6 @@
 function input() {
+  'use strict'
+
   var $inputForm = $(
     '  <form class="type-in-form" name="typeInForm">'+
     '    <header class="form-header">'+
