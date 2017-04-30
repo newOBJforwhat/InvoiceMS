@@ -1,6 +1,5 @@
 package Common.Controller;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import Common.CommonInfo;
@@ -10,7 +9,7 @@ import net.sf.json.JSONObject;
  * 接口输出JSON形式
  * restful
  * {"status":"0|1|2","info":message,"result":result}
- * status：0.失败；1.成功；2.（未定）；
+ * status：0.失败；1.成功；2.（异常）；
  * info：返回服务器信息
  * result：返回查询结果
  * @author ctk
@@ -33,6 +32,17 @@ public class OutputStringController {
 	public String failure(String info){
 		JSONObject result = new JSONObject();
 		result.put("status",0);
+		if(info == null)
+			result.put("info", "");
+		else
+			result.put("info", info);
+		result.put("result", "");
+		return result.toString();
+	}
+	//返回异常
+	public String exception(String info){
+		JSONObject result = new JSONObject();
+		result.put("status",2);
 		if(info == null)
 			result.put("info", "");
 		else

@@ -8,7 +8,7 @@
 		select * from User where id = #{id}
 	</select>
 	<select id="findByUsernameAndPassword" resultMap="UserMap" useCache="true">
-		select id,username,password,type from User where username = #{username} 
+		select id,username,password,type,name from User where username = #{username} 
 		and password = #{password}
 	</select>
 	<select id="findByUsername" resultMap="UserMap">
@@ -19,8 +19,8 @@
 	</select>
 	<!--插入-->
 	<insert id="applyUser" parameterType="User" useGeneratedKeys="true" keyProperty="id" >
-		insert into User(username,password,name,type,is_deleted) 
-		values(#{username},#{password},#{name},#{type},#{isDeleted})
+		insert into User(username,password,name,type,is_deleted,create_time) 
+		values(#{username},#{password},#{name},#{type},#{isDeleted},#{createTime})
 	</insert>
 	<!--更新-->
 	<update id="updateInfo" >

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import Common.CommonInfo;
 import Common.Controller.OutputStringController;
+import Enum.DeleteCode;
 import Enum.UserType;
 import Form.ApplyUserForm;
 import Model.User;
@@ -50,18 +51,20 @@ public class UserController extends OutputStringController{
 			user = uService.login(username, password);
 		} catch (Exception e) {
 			logger.error("登录发生异常:" + e.getMessage());
-			return failure("登录发生异常");
+			return exception("登录发生异常");
 		}
 		if (user != null) {
+			if(user.getIsDeleted() == DeleteCode.DELETED.getCode())
+				return failure("用户名或者密码错误");
 			session.setAttribute(CommonInfo.userInfo, user);
 			//返回用户信息
 			JSONObject userinfo = new JSONObject();
 			userinfo.put("username", user.getUsername());
-			userinfo.put("name", user.getName());
+			userinfo.put("name", user.getName() == null?"":user.getName());
 			userinfo.put("type", user.getType());
 			return resultSuccess("登录成功", userinfo.toString());
-		}
-		return failure("不存在此用户");
+		} 
+		return failure("用户名或者密码错误");
 	}
 	/**
 	 * 登出方法
@@ -86,7 +89,7 @@ public class UserController extends OutputStringController{
 			u = uService.validateUser(username);
 		}catch (Exception e) {
 			logger.debug("验证用户出错 : "+e.getMessage());
-			return failure("验证方法出现异常");
+			return exception("验证方法出现异常");
 		}
 		if(u == null)
 			return failure("不存在此用户");
@@ -113,9 +116,8 @@ public class UserController extends OutputStringController{
 			return failure("密码位数须在6-30位");
 		else if(form.getName() == null || form.getName().equals(""))
 			return failure("填写用户名字");
-//		else if(form.getDepartmentId() == 0)
-//			return failure("选择部门");
-		
+		else if(form.getType() != UserType.STAFF.getCode() && form.getType() != UserType.AUDITING.getCode() && form.getType() != UserType.FINANCE.getCode())
+			return failure("非法用户类型");
 		form.setCreateTime(System.currentTimeMillis());
 		try{
 			if(uService.applyUser(form) != 0)
@@ -124,10 +126,21 @@ public class UserController extends OutputStringController{
 				return failure("用户已存在");
 		}catch (Exception e) {
 			logger.error("生成用户失败:"+e.getMessage());
-			return failure("申请用户失败");
+			return exception("申请用户失败");
 		}
 	}
-	
+	/**
+	 * 测试接口
+	 * @param str
+	 * @return
+	 */
+//	@CrossOrigin(origins = "*", maxAge = 3600)
+//	@RequestMapping(value="/noNeedLogin/acceptStr",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
+//	@ResponseBody
+//	public String acceptStr(String str){
+//		System.out.println("获得字符串："+str);
+//		return success("成功");
+//	}
 	/**
 	 * 修改密码接口
 	 * @param session
@@ -145,14 +158,15 @@ public class UserController extends OutputStringController{
 			return success("密码修改成功");
 		} catch (NullPointerException e) {
 			logger.debug("查询不到用户:" + e.getMessage());
-			return failure("查询不到用户");
+			return exception("查询不到用户");
 		} catch (Exception e) {
 			logger.error("修改密码产生异常:" + e.getMessage());
-			return failure("修改密码异常");
+			return exception("修改密码异常");
 		}
 	}
 	/**
-	 * 更新用户信息接口
+	 * 更改姓名
+	 * 
 	 * @param session
 	 * @param name
 	 * @param departmentId
@@ -185,10 +199,10 @@ public class UserController extends OutputStringController{
 			uService.deleteUser(id);
 		}catch (NullPointerException e) {
 			logger.debug("找不到此用户:"+e.getMessage());
-			return failure("该用户不存在");
+			return exception("该用户不存在");
 		}catch (Exception e) {
 			logger.error("产生异常:"+e.getMessage());
-			return failure("产生异常");
+			return exception("产生异常");
 		}
 		return success("删除成功");
 	}
@@ -204,6 +218,7 @@ public class UserController extends OutputStringController{
 			JSONArray userArr = new JSONArray();
 			for(User u : userData){
 				JSONObject userjson = new JSONObject();
+				userjson.put("id", u.getId());
 				userjson.put("username", u.getUsername());
 				userjson.put("name", u.getName());
 				userjson.put("type", u.getType());
@@ -212,7 +227,7 @@ public class UserController extends OutputStringController{
 			return resultSuccess("返回成功", userArr.toString());
 		}catch (Exception e) {
 			logger.error("查询错误:"+e.getMessage());
-			return failure("查询错误");
+			return exception("查询错误");
 		}
 		
 	}
@@ -229,7 +244,7 @@ public class UserController extends OutputStringController{
 			uService.softDelete(id);
 		}catch (Exception e) {
 			logger.error("软删除失败："+e.getMessage());
-			return failure("软删除失败");
+			return exception("软删除失败");
 		}
 		return success("软删除成功");
 	}
@@ -238,7 +253,7 @@ public class UserController extends OutputStringController{
 	 * 返回所有用户类型
 	 * @return
 	 */
-	@RequestMapping(value="/super/getType",produces="text/html;charset=UTF-8",method=RequestMethod.GET)
+	@RequestMapping(value="/getType",produces="text/html;charset=UTF-8",method=RequestMethod.GET)
 	@ResponseBody 
 	public String getUserType(){
 		JSONObject jsonResult  = new JSONObject();

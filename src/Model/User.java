@@ -21,6 +21,8 @@ public class User {
 	private String password;
 	private String name;
 	private int type;
+	@Column("create_time")
+	private long createTime;
 	@Column("is_deleted")
 	private int isDeleted;
 	public long getId() {
@@ -64,5 +66,11 @@ public class User {
 	}
 	public void setIsDeleted(int isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+	public long getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(long createTime) {
+		this.createTime = createTime;
 	}
 }

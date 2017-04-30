@@ -55,13 +55,14 @@ public class UserService {
 	public long applyUser(ApplyUserForm form){
 		User u = new User();
 		u.setId(0);
-//		u.setDepartmentId(form.getDepartmentId());
 		u.setName(form.getName());
 		u.setPassword(form.getPassword());
 		u.setType(form.getType());
 		u.setUsername(form.getUsername());
+		u.setCreateTime(form.getCreateTime());
 		u.setIsDeleted(DeleteCode.UNDELETED.getCode());
-		if(uDao.findByUsername(u.getUsername()) != null){
+		User dbuser = uDao.findByUsername(u.getUsername());
+		if(dbuser == null){
 			uDao.applyUser(u);
 		}
 		return u.getId();
