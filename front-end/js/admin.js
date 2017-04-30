@@ -1,8 +1,8 @@
 function admin() {
-  'use strict';
+  'use strict'
 
-  $('.main').prepend($('<section class="admin-bar"><button class="btn btn-primary" id="add-user-btn">添加用户</button></section>'));
-  $('#add-user-btn').click(addUser);
+  $('.main').prepend($('<section class="admin-bar"><button class="btn btn-primary" id="add-user-btn">添加用户</button></section>'))
+  $('#add-user-btn').click(addUser)
 
   if (!$('#add-user-modal').length) {
     var $addUserModal = $([
@@ -16,16 +16,20 @@ function admin() {
       '      </div>',
       '      <div class="modal-body">',
       '        <section class="form-group">',
-      '          <label for="no">工号:</label>',
-      '          <input id="no" class="form-control" type="text" name="no" required>',
+      '          <label for="username">用户名:</label>',
+      '          <input id="username" class="form-control" type="text" name="username" required>',
       '        </section>',
       '        <section class="form-group">',
       '          <label for="name">姓名:</label>',
       '          <input id="name" class="form-control" type="text" name="name" required>',
       '        </section>',
       '        <section class="form-group">',
-      '          <label for="role">角色:</label>',
-      '          <select id="role" class="form-control" name="department" required></select>',
+      '          <label for="password">密码:</label>',
+      '          <input id="password" class="form-control" type="text" name="password" required>',
+      '        </section>',
+      '        <section class="form-group">',
+      '          <label for="type">角色:</label>',
+      '          <select id="type" class="form-control" name="type" required></select>',
       '        </section>',
       '      </div>',
       '      <div class="modal-footer">',
@@ -34,12 +38,13 @@ function admin() {
       '      </div>',
       '    </form>',
       '  </div>',
-      '</div>'].join(''));
-    $addUserModal.find('form').get(0).onsubmit = submitAdd;
-    $('body').append($addUserModal);
+      '</div>'].join(''))
+    $addUserModal.find('form').get(0).onsubmit = submitAdd
+    $('body').append($addUserModal)
 
-    $('#no').keyup(utils.debounce(function () {
+    $('#username').keyup(utils.debounce(function () {
       var username = $(this).val()
+      var self = this
 
       if (!username) {
         return
@@ -48,22 +53,25 @@ function admin() {
       $http.get('/user/noNeedLogin/validateUser/' + username)
         .then(function (resp) {
           if (resp.status === 0) {
-            utils.errorValidate($('#no'), false)
+            utils.errorValidate($(self), false)
           } else {
-            utils.errorValidate($('#no'), true)
+            utils.errorValidate($(self), true)
           }
         })
     }, 350))
   }
 
-  $('#table-container').html('<table id="table"></table>');
-  var $table = $('#table');
+  $('#table-container').html('<table id="table"></table>')
+  var $table = $('#table')
 
   $table.bootstrapTable({
     search: true,
     columns: [{
-      field: 'no',
-      title: '工号'
+      field: 'id',
+      title: 'ID'
+    }, {
+      field: 'username',
+      title: '用户名'
     }, {
       field: 'name',
       title: '姓名'
@@ -79,38 +87,19 @@ function admin() {
   $table.bootstrapTable('showLoading')
 
   $http.get('/user/super/queryUser')
-    .then(function () {
-      // $table.bootstrapTable({
-      //   search: true,
-      //   columns: [{
-      //     field: 'no',
-      //     title: '工号'
-      //   }, {
-      //     field: 'name',
-      //     title: '姓名'
-      //   }, {
-      //     field: 'role',
-      //     title: '角色'
-      //   }, {
-      //     field: 'operation',
-      //     title: '操作'
-      //   }],
-      //   data: [{
-      //     no: 1,
-      //     name: '王大全',
-      //     role: '录入员',
-      //     operation: '<button class="btn btn-warning reset-password">重置密码</button>'
-      //   }, {
-      //     no: 2,
-      //     name: '李云龙',
-      //     role: '录入员',
-      //     operation: '<button class="btn btn-warning reset-password">重置密码</button>'
-      //   }]
-      // });
+    .then(function (resp) {
+      var data = resp.result.map(function (user) {
+        return $.extend({}, user, {
+          role: ['超级用户', '普通用户', '部门审核', '财务'][user.type],
+          operation: user.type === 0 ? '' : '<button class="btn btn-warning reset-password">重置密码</button>'
+        })
+      })
+
+      $table.bootstrapTable('load', data)
 
       $table.find('button.reset-password').each(function (index, elm) {
         elm.onclick = resetConfirm.bind(elm)
-      });
+      })
 
       $table.bootstrapTable('hideLoading')
     })
@@ -119,54 +108,64 @@ function admin() {
     $('#add-user-modal').modal({
       backdrop: 'static',
       keyboard: false
-    });
+    })
   }
 
   /**
    * 获取角色列表
    */
   (function () {
-    // 测试代码
-    var data = ['普通用户', '部门审核', '财务'];
+    var data = ['普通用户', '部门审核', '财务']
 
-    data.forEach(function (role) {
-      $('#role').append('<option>' + role + '</option>')
-    });
-  })();
+    data.forEach(function (type, index) {
+      $('#type').append('<option value="' + (index + 1) + '">' + type + '</option>')
+    })
+  })()
 
   /**
    * 提交新增用户
    * @param e
    */
   function submitAdd(e) {
-    e.preventDefault();
+    e.preventDefault()
 
-    var data = {
-      no: this.no.value,
-      name: this.name.value,
-      role: this.role.value
+    var hasError
+
+    $('#add-user-modal').find('.form-group').each(function (index, elm) {
+      hasError = $(elm).hasClass('has-error')
+    })
+
+    if (hasError) {
+      return
     }
 
-    $http.post('/user/add', data)
+    var data = {
+      username: this.username.value,
+      name: this.name.value,
+      password: this.password.value,
+      type: this.type.value
+    }
+
+    $http.post('/user/super/applyUser', data)
       .then(function () {
-        location.reload(true);
+        location.reload(true)
       })
       .fail(function () {
 
-      });
+      })
   }
 
   function resetConfirm() {
-    var modal = $('#small-modal');
-    modal.modal();
-    var no = $(this).parent().parent().find('td').get(0).innerHTML;
-    var name = $(this).parent().parent().find('td').get(1).innerHTML;
+    var modal = $('#small-modal')
+    modal.modal()
+    var id = $(this).parent().parent().find('td').get(0).innerHTML
+    var name = $(this).parent().parent().find('td').get(1).innerHTML
 
     utils.setModal(modal, {
       header: '重置确认',
-      body: '工号为' + no + '用户' + name + '的密码将会被重置为123456',
-      confirm: resetPassword.bind(null, no)
-    });
+      body: 'ID为' + id + '的用户' + name + '的密码将会被重置为123456',
+      confirm: resetPassword.bind(null, id)
+    })
   }
 
   function resetPassword(no) {
@@ -174,11 +173,11 @@ function admin() {
       no: no
     })
       .done(function () {
-        location.href = 'success.html';
+        location.href = 'success.html'
       })
       .fail(function () {
-        $('#fail-modal').modal();
-      });
+        $('#fail-modal').modal()
+      })
   }
 }
 

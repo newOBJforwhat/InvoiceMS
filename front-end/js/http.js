@@ -16,6 +16,8 @@ var $http = (function () {
       options.url = host + url
     }
 
+    options.xhrFields = {withCredentials: true}
+
     return $.ajax(options)
       .then(function (resp) {
         return JSON.parse(resp)
