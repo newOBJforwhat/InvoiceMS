@@ -1,4 +1,4 @@
-function admin(utils) {
+function admin() {
   'use strict';
 
   $('.main').prepend($('<section class="admin-bar"><button class="btn btn-primary" id="add-user-btn">添加用户</button></section>'));
@@ -37,10 +37,28 @@ function admin(utils) {
       '</div>'].join(''));
     $addUserModal.find('form').get(0).onsubmit = submitAdd;
     $('body').append($addUserModal);
+
+    $('#no').keyup(utils.debounce(function () {
+      var username = $(this).val()
+
+      if (!username) {
+        return
+      }
+
+      $http.get('/user/noNeedLogin/validateUser/' + username)
+        .then(function (resp) {
+          if (resp.status === 0) {
+            utils.errorValidate($('#no'), false)
+          } else {
+            utils.errorValidate($('#no'), true)
+          }
+        })
+    }, 350))
   }
 
   $('#table-container').html('<table id="table"></table>');
   var $table = $('#table');
+
   $table.bootstrapTable({
     search: true,
     columns: [{
@@ -55,23 +73,47 @@ function admin(utils) {
     }, {
       field: 'operation',
       title: '操作'
-    }],
-    data: [{
-      no: 1,
-      name: '王大全',
-      role: '录入员',
-      operation: '<button class="btn btn-warning reset-password">重置密码</button>'
-    }, {
-      no: 2,
-      name: '李云龙',
-      role: '录入员',
-      operation: '<button class="btn btn-warning reset-password">重置密码</button>'
     }]
-  });
+  })
 
-  $table.find('button.reset-password').each(function (index, elm) {
-    elm.onclick = resetConfirm.bind(elm)
-  });
+  $table.bootstrapTable('showLoading')
+
+  $http.get('/user/super/queryUser')
+    .then(function () {
+      // $table.bootstrapTable({
+      //   search: true,
+      //   columns: [{
+      //     field: 'no',
+      //     title: '工号'
+      //   }, {
+      //     field: 'name',
+      //     title: '姓名'
+      //   }, {
+      //     field: 'role',
+      //     title: '角色'
+      //   }, {
+      //     field: 'operation',
+      //     title: '操作'
+      //   }],
+      //   data: [{
+      //     no: 1,
+      //     name: '王大全',
+      //     role: '录入员',
+      //     operation: '<button class="btn btn-warning reset-password">重置密码</button>'
+      //   }, {
+      //     no: 2,
+      //     name: '李云龙',
+      //     role: '录入员',
+      //     operation: '<button class="btn btn-warning reset-password">重置密码</button>'
+      //   }]
+      // });
+
+      $table.find('button.reset-password').each(function (index, elm) {
+        elm.onclick = resetConfirm.bind(elm)
+      });
+
+      $table.bootstrapTable('hideLoading')
+    })
 
   function addUser() {
     $('#add-user-modal').modal({
@@ -81,14 +123,14 @@ function admin(utils) {
   }
 
   /**
-   * 获取部门列表
+   * 获取角色列表
    */
   (function () {
     // 测试代码
     var data = ['普通用户', '部门审核', '财务'];
 
-    data.forEach(function (department) {
-      $('#role').append('<option>' + department + '</option>')
+    data.forEach(function (role) {
+      $('#role').append('<option>' + role + '</option>')
     });
   })();
 
@@ -99,12 +141,14 @@ function admin(utils) {
   function submitAdd(e) {
     e.preventDefault();
 
-    $.post('/user/add', {
+    var data = {
       no: this.no.value,
       name: this.name.value,
-      department: this.department.value
-    })
-      .done(function () {
+      role: this.role.value
+    }
+
+    $http.post('/user/add', data)
+      .then(function () {
         location.reload(true);
       })
       .fail(function () {

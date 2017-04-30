@@ -45,6 +45,7 @@
   </div>
 </div>
 <script type="text/javascript" src="./lib/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/http.js"></script>
 <script type="text/javascript">
   function login(e) {
     e.preventDefault();
@@ -57,12 +58,11 @@
       'verify&&financial'
     ]
 
-    $.post('http://120.25.125.43:8080/InvoiceMS/user/noNeedLogin/login', {
+    $http.post('/user/noNeedLogin/login', {
       username: $('#username').val(),
       password: $('#password').val()
     })
-      .done(function (resp) {
-        resp = JSON.parse(resp)
+      .then(function (resp) {
         if (resp.status === 1) {
           sessionStorage.setItem('username', resp.result.username)
           sessionStorage.setItem('type', resp.result.type)

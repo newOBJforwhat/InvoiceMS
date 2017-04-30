@@ -1,4 +1,4 @@
-function preview (utils) {
+function preview () {
   'use strict'
 
   $('#table-container').html('<table id="table"></table>');
@@ -10,7 +10,7 @@ function preview (utils) {
       title: '发票号'
     }, {
       field: 'user',
-      title: '姓名'
+      title: '录入者'
     }, {
       field: 'money',
       title: '金额'

@@ -1,4 +1,4 @@
-function verify(utils, role) {
+function verify(role) {
   'use strict'
 
   $('#table-container').html('<table id="table"></table>')
