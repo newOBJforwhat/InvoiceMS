@@ -160,6 +160,10 @@ h5 {
   padding: 10px;
 }
 
+.search {
+  z-index: -1;
+}
+
 .pointer {
   cursor: pointer !important;
 }

@@ -108,7 +108,12 @@ function admin() {
       var data = userData.map(function (user) {
         return $.extend({}, user, {
           role: userType[user.type],
-          operation: user.type === 0 ? '' : '<button class="btn btn-warning reset-password">重置密码</button>'
+          operation: user.type === 0
+            ? ''
+            : ['<button class="btn btn-warning reset-password">重置密码</button>',
+              '&nbsp;',
+              '<button class="btn btn-danger delete-user">删除用户</button>']
+              .join('')
         })
       })
 
@@ -116,6 +121,10 @@ function admin() {
 
       $table.find('button.reset-password').each(function (index, elm) {
         elm.onclick = resetConfirm.bind(elm)
+      })
+
+      $table.find('button.btn-danger').each(function (index, elm) {
+        elm.onclick = deleteConfirm.bind(elm)
       })
 
       $table.bootstrapTable('hideLoading')
@@ -166,22 +175,49 @@ function admin() {
   function resetConfirm() {
     var modal = $('#small-modal')
     modal.modal()
+
     var id = $(this).parent().parent().find('td').get(0).innerHTML
-    var name = $(this).parent().parent().find('td').get(1).innerHTML
+    var username = $(this).parent().parent().find('td').get(1).innerHTML
+    var name = $(this).parent().parent().find('td').get(2).innerHTML
 
     utils.setModal(modal, {
       header: '重置确认',
-      body: 'ID为' + id + '的用户' + name + '的密码将会被重置为123456',
+      body: '用户名为' + username + '的用户' + name + '的密码将会被重置为123456',
       confirm: resetPassword.bind(null, id)
     })
   }
 
-  function resetPassword(no) {
-    $.post('/user/reset', {
-      no: no
+  function resetPassword(id) {
+    $http.post('/user/reset', {
+      id: id
     })
-      .done(function () {
+      .then(function () {
         location.href = 'success.html'
+      })
+      .fail(function () {
+        $('#fail-modal').modal()
+      })
+  }
+
+  function deleteConfirm() {
+    var modal = $('#small-modal')
+    modal.modal()
+
+    var id = $(this).parent().parent().find('td').get(0).innerHTML
+    var username = $(this).parent().parent().find('td').get(1).innerHTML
+    var name = $(this).parent().parent().find('td').get(2).innerHTML
+
+    utils.setModal(modal, {
+      header: '删除确认',
+      body: '用户名为' + username + '的用户' + name + '的将会被删除，不可恢复',
+      confirm: deleteUser.bind(null, id)
+    })
+  }
+
+  function deleteUser(id) {
+    $http.get('/user/super/softDelete/' + id)
+      .then(function () {
+        location.reload(true)
       })
       .fail(function () {
         $('#fail-modal').modal()
