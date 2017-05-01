@@ -39,6 +39,7 @@ function admin() {
       '    </form>',
       '  </div>',
       '</div>'].join(''))
+
     $addUserModal.find('form').get(0).onsubmit = submitAdd
     $('body').append($addUserModal)
 
@@ -64,33 +65,49 @@ function admin() {
   $('#table-container').html('<table id="table"></table>')
   var $table = $('#table')
 
+  var tableColumns = [{
+    field: 'id',
+    title: 'ID'
+  }, {
+    field: 'username',
+    title: '用户名'
+  }, {
+    field: 'name',
+    title: '姓名'
+  }, {
+    field: 'role',
+    title: '角色'
+  }, {
+    field: 'operation',
+    title: '操作'
+  }]
+
   $table.bootstrapTable({
     search: true,
-    columns: [{
-      field: 'id',
-      title: 'ID'
-    }, {
-      field: 'username',
-      title: '用户名'
-    }, {
-      field: 'name',
-      title: '姓名'
-    }, {
-      field: 'role',
-      title: '角色'
-    }, {
-      field: 'operation',
-      title: '操作'
-    }]
+    pagination: true,
+    pageSize: 10,
+    columns: tableColumns
   })
 
   $table.bootstrapTable('showLoading')
 
-  $http.get('/user/super/queryUser')
-    .then(function (resp) {
-      var data = resp.result.map(function (user) {
+  var getUsers = $http.get('/user/super/queryUser')
+  var getUserTypes = $http.get('/user/getType')
+
+  $http.all([getUserTypes, getUsers])
+    .then(function (resps) {
+      var userType = resps[0].result
+      var userData = resps[1].result
+
+      for (var i in userType) {
+        if (i !== '0') {
+          $('#type').append('<option value="' + i + '">' + userType[i] + '</option>')
+        }
+      }
+
+      var data = userData.map(function (user) {
         return $.extend({}, user, {
-          role: ['超级用户', '普通用户', '部门审核', '财务'][user.type],
+          role: userType[user.type],
           operation: user.type === 0 ? '' : '<button class="btn btn-warning reset-password">重置密码</button>'
         })
       })
@@ -112,17 +129,6 @@ function admin() {
   }
 
   /**
-   * 获取角色列表
-   */
-  (function () {
-    var data = ['普通用户', '部门审核', '财务']
-
-    data.forEach(function (type, index) {
-      $('#type').append('<option value="' + (index + 1) + '">' + type + '</option>')
-    })
-  })()
-
-  /**
    * 提交新增用户
    * @param e
    */
@@ -131,9 +137,11 @@ function admin() {
 
     var hasError
 
-    $('#add-user-modal').find('.form-group').each(function (index, elm) {
-      hasError = $(elm).hasClass('has-error')
-    })
+    $('#add-user-modal')
+      .find('.form-group')
+      .each(function (index, elm) {
+        hasError = $(elm).hasClass('has-error')
+      })
 
     if (hasError) {
       return

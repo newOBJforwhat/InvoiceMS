@@ -31,6 +31,8 @@ function verify(role) {
 
   $table.bootstrapTable({
     search: true,
+    pagination: true,
+    pageSize: 10,
     columns: tableColumns,
     data: [{
       invoiceId: '23213213',

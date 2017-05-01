@@ -45,9 +45,29 @@ var $http = (function () {
     return ajax(url, options)
   }
 
+  function all(reqArr) {
+    var reqs = []
+
+    Array.prototype.forEach.call(arguments, function (arg) {
+      reqs = reqs.concat(arg)
+    })
+
+    return $.when.apply(null, reqArr)
+      .then(function () {
+        var resps = []
+
+        Array.prototype.forEach.call(arguments, function (arg) {
+          resps.push(arg)
+        })
+
+        return resps
+      })
+  }
+
   return {
     ajax: ajax,
     get: get,
-    post: post
+    post: post,
+    all: all
   }
 })()
