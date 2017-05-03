@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,8 +42,35 @@ public class InvoiceController extends OutputStringController{
 			return failure("发票已存在!");
 		}catch (Exception e) {
 			logger.error("录入错误:"+e.getMessage());
-			return failure("录入出现异常!");
+			return exception("录入出现异常!");
 		}
+	}
+	/**
+	 * 按发票号查询
+	 * @param invoiceNumber
+	 * @return
+	 */
+	@RequestMapping(value="/existInvoice",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
+	public String existInvoice(String invoiceNumber){
+		Invoice invoice;
+		try{
+			invoice = iService.getByNumber(invoiceNumber);
+		}catch (Exception e) {
+			logger.error("验证出错："+e.getMessage());
+			return exception("验证发票号出错");
+		}
+		if(invoice != null){
+			JSONObject iJson = new JSONObject();
+			iJson.put("invoiceNumber",invoice.getId());
+			iJson.put("invoiceNumber",invoice.getInvoiceNumber());
+			iJson.put("invoiceDate",invoice.getInvoiceDate());
+			iJson.put("money",invoice.getMoney());
+			iJson.put("registerDate",invoice.getRegisterDate());
+			iJson.put("status",invoice.getStatus());
+			iJson.put("supplierName",invoice.getSupplierName());
+			return resultSuccess("查询成功", iJson.toString());
+		}
+		return resultSuccess("查询成功", "");
 	}
 	/**
 	 * 获取自身提交的发票
@@ -60,6 +88,7 @@ public class InvoiceController extends OutputStringController{
 				 * 需要vo
 				 */
 				JSONObject iJson = new JSONObject();
+				iJson.put("id", in.getId());
 				iJson.put("invoiceNumber",in.getInvoiceNumber());
 				iJson.put("invoiceDate",in.getInvoiceDate());
 				iJson.put("money",in.getMoney());
@@ -70,7 +99,7 @@ public class InvoiceController extends OutputStringController{
 			return resultFailure("查询成功", iarr.toString());
 		}catch (Exception e) {
 			logger.error("查询错误:"+e.getMessage());
-			return failure("查询失败");
+			return exception("查询失败");
 		}
 	}
 	/**
@@ -85,4 +114,59 @@ public class InvoiceController extends OutputStringController{
 		jsonResult.put(InvoiceStatus.FINANCE.getCode(), InvoiceStatus.FINANCE.getName());
 		return resultSuccess("success", jsonResult.toString());
 	}
+	/**
+	 * 录入员提交发票到业务审核
+	 * @return
+	 */
+	@RequestMapping(value="/staff/Forward/invoiceNumber",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
+	public String staffForword(@PathVariable("invoiceNumber") String invoiceNumber){
+		return null;
+	}
+	/**
+	 * 业务员提交发票到财务
+	 * @return
+	 */
+	@RequestMapping(value="/auditing/Forward/{invoiceNumber}",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
+	public String auditingForward(@PathVariable("invoiceNumber") String invoiceNumber){
+		return null;
+	}
+	
+	/**
+	 * 业务员回退
+	 * @return
+	 */
+	@RequestMapping(value="/auditing/back/{invoiceNumber}",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
+	public String back(@PathVariable("invoiceNumber") String invoiceNumber){
+		return null;
+	}
+
+	/**
+	 * 财务终结发票
+	 * @return
+	 */
+	@RequestMapping(value="/finance/final/{invoiceNumber}",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
+	public String financeFinal(@PathVariable("invoiceNumber") String invoiceNumber){
+		return null;
+	}
+	/**
+	 * 财务回退
+	 * @return
+	 */
+	@RequestMapping(value="/finance/back/{invoiceNumber}",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
+	public String financeBack(@PathVariable("invoiceNumber") String invoiceNumber){
+		return null;
+	}
+	/**
+	 * 根据发票号和供应商名字模糊查询
+	 * @param invoiceNumber
+	 * @param supplier
+	 * @return
+	 */
+	@RequestMapping(value="/findByNumberorSupplier",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
+	public List<Invoice> findByNumberorSupplier(String invoiceNumber,String supplier){
+		
+		return null;
+	}
+	
+
 }

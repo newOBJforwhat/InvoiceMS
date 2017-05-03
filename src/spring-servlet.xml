@@ -41,6 +41,7 @@
            <bean class="Common.Interceptor.SuperUserInterceptor" />  
         </mvc:interceptor> 
     </mvc:interceptors>
+    
     <!--配置跨域-->
    <mvc:cors>  
        <mvc:mapping path="/**" allowed-origins="*" allow-credentials="true" max-age="3000" allowed-methods="GET,POST,OPTIONS"/>  
