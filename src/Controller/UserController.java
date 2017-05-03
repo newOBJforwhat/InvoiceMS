@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,30 +39,37 @@ public class UserController extends OutputStringController{
 	@RequestMapping(value="/noNeedLogin/login",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
 	@ResponseBody 
 	public String login(HttpSession session,String username,String password){
+		System.out.println("username="+username+" password="+password);
 		if(username == null)
 			return failure("请填写用户名");
 		if(password == null)
 			return failure("请填写密码");
-		
-		if(getCurrentUser(session) != null)
-			return success("用户已登录");
-		
-		User user = null;
-		try {
-			user = uService.login(username, password);
-		} catch (Exception e) {
-			logger.error("登录发生异常:" + e.getMessage());
-			return exception("登录发生异常");
-		}
-		if (user != null) {
-			if(user.getIsDeleted() == DeleteCode.DELETED.getCode())
-				return failure("用户名或者密码错误");
-			session.setAttribute(CommonInfo.userInfo, user);
+		User user = getCurrentUser(session); 
+		if(user != null){
 			//返回用户信息
 			JSONObject userinfo = new JSONObject();
 			userinfo.put("username", user.getUsername());
 			userinfo.put("name", user.getName() == null?"":user.getName());
 			userinfo.put("type", user.getType());
+			return resultSuccess("用户已登录", userinfo.toString());
+		}
+		//登录
+		User loginUser = null;
+		try {
+			loginUser = uService.login(username, password);
+		} catch (Exception e) {
+			logger.error("登录发生异常:" + e.getMessage());
+			return exception("登录发生异常");
+		}
+		if (loginUser != null) {
+			if(loginUser.getIsDeleted() == DeleteCode.DELETED.getCode())
+				return failure("用户名或者密码错误");
+			session.setAttribute(CommonInfo.userInfo, loginUser);
+			//返回用户信息
+			JSONObject userinfo = new JSONObject();
+			userinfo.put("username", loginUser.getUsername());
+			userinfo.put("name", loginUser.getName() == null?"":loginUser.getName());
+			userinfo.put("type", loginUser.getType());
 			return resultSuccess("登录成功", userinfo.toString());
 		} 
 		return failure("用户名或者密码错误");
@@ -150,11 +158,14 @@ public class UserController extends OutputStringController{
 	 */
 	@RequestMapping(value="/alterPassword",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
 	@ResponseBody
-	public String alterPassword(HttpSession session,String password,String passwordAgain){
+	public String alterPassword(HttpSession session,String beforePassword,String password,String passwordAgain){
+		User user = getCurrentUser(session);
+		if(!user.getPassword().equals(beforePassword))
+			return failure("原密码输入不正确");
 		if (!password.equals(passwordAgain))
 			return failure("两次密码输入不正确");
 		try {
-			uService.alterPassword(getCurrentUser(session).getId(), password);
+			uService.alterPassword(user.getId(), password);
 			return success("密码修改成功");
 		} catch (NullPointerException e) {
 			logger.debug("查询不到用户:" + e.getMessage());
@@ -163,6 +174,27 @@ public class UserController extends OutputStringController{
 			logger.error("修改密码产生异常:" + e.getMessage());
 			return exception("修改密码异常");
 		}
+	}
+	/**
+	 * 重置密码接口
+	 * 超级用户
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/super/resetPassword/{id}",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
+	@ResponseBody 
+	public String resetUserPassword(@PathVariable("id") long id){
+		try{
+			uService.alterPassword(id, "123456");
+		}catch (NullPointerException e) {
+			logger.debug("重置密码出现异常:"+e.getMessage());
+			return failure("找不到用户");
+		}
+		catch (Exception e) {
+			logger.error("重置密码出现异常:"+e.getMessage());
+			return exception("重置密码出现异常");
+		}
+		return success("重置成功");
 	}
 	/**
 	 * 更改姓名
@@ -210,9 +242,10 @@ public class UserController extends OutputStringController{
 	 * 超级用户查询所有接口
 	 * @return
 	 */
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	@RequestMapping(value="/super/queryUser",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
 	@ResponseBody
-	public String queryUser(){
+	public String queryUser(HttpSession session){
 		try{
 			List<User> userData = uService.findAll();
 			JSONArray userArr = new JSONArray();

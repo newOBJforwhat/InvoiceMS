@@ -47,4 +47,9 @@ public class InvoiceService {
 		List<Invoice> results = iDao.findByStatus(status);
 		return results;
 	}
+	@Transactional(rollbackFor=Exception.class,readOnly = true, propagation = Propagation.REQUIRED,timeout=15)
+	public Invoice getByNumber(String number){
+		Invoice invoice = iDao.findByNumber(number);
+		return invoice;
+	}
 }

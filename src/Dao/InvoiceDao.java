@@ -11,6 +11,7 @@ public interface InvoiceDao {
 	public void addInvoice(Invoice invoice); 
 	//删除
 	//查找
+	public Invoice findById(long id);
 	public Invoice findByNumber(String invoiceNumber);
 	public List<Invoice> findByUserId(long userid);
 	public List<Invoice> findByStatus(int status);
@@ -18,6 +19,6 @@ public interface InvoiceDao {
 	//修改
 	public void invoiceMove(@Param("id")int id ,@Param("status") int status);//状态转移
 	public void updateInvoiceInfo(@Param("id") int id, @Param("money") String money,@Param("supplierId") String supplierId,@Param("supplierName") String supplierName,@Param("invoiceDate")  String invoiceDate);
-	
+	public void softDelete(long id);
 	
 }
