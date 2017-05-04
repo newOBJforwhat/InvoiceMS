@@ -199,10 +199,8 @@
     var newName = form.name.value
     $http.post('/user/updateInfo', {name: newName})
       .then(function () {
-        $('#update-profile').modal('hide')
-        userInfo.name = newName
         sessionStorage.setItem('name', newName)
-        $('.username').html(userInfo.name)
+        location.reload(true)
       })
   }
 
