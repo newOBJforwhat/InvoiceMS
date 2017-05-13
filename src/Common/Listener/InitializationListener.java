@@ -7,6 +7,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import org.apache.log4j.Logger;
+
+import Common.Encoder;
 import Common.InitDataBases;
 import Enum.UserType;
 import Model.User;
@@ -56,7 +58,8 @@ public class InitializationListener implements ServletContextListener {
 		//添加超级用户
 		String querySql = "select * from User where username = 'admin'";
 		StringBuilder insertSql = new StringBuilder("insert into User(department_id,username,password,name,type,is_deleted) values(");
-		insertSql.append("0,'admin','123456','超级用户',");
+		insertSql.append("0,'admin',");
+		insertSql.append(Encoder.string2MD5("123456")+",'超级用户',");
 		insertSql.append(UserType.SUPER.getCode());
 		insertSql.append(",0)");
 		if(!initDB.dataExist(querySql)){

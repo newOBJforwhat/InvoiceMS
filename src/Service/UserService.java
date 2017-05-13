@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import Common.Encoder;
 import Dao.UserDao;
 import Enum.DeleteCode;
 import Form.ApplyUserForm;
@@ -56,7 +58,7 @@ public class UserService {
 		User u = new User();
 		u.setId(0);
 		u.setName(form.getName());
-		u.setPassword(form.getPassword());
+		u.setPassword(Encoder.string2MD5(form.getPassword() ));
 		u.setType(form.getType());
 		u.setUsername(form.getUsername());
 		u.setCreateTime(form.getCreateTime());

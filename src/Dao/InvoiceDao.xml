@@ -9,23 +9,43 @@
 	</insert>		
 	<!--查找-->	
 	<select id="findById" resultMap="InvoiceMap">
-		select * from Invoice where id = #{id}
+		select * from Invoice where id = #{id} and is_deleted = 0
 	</select>
 	<select id = "findByNumber" resultMap="InvoiceMap">
-		select * from Invoice where invoice_number = #{invoiceNumber}
+		select * from Invoice where invoice_number = #{invoiceNumber} and is_deleted = 0
 	</select>
 	<select id = "findByUserId" resultMap="InvoiceMap">
-		select * from Invoice where register = #{userid}
+		select * from Invoice where register = #{userid} and is_deleted = 0
+	</select>
+	<select id = "findByStatusnoUserId" resultMap="InvoiceMap">
+		select * from Invoice where status = #{status} and is_deleted = 0
 	</select>
 	<select id = "findByStatus" resultMap="InvoiceMap">
-		select * from Invoice where status = #{status}
+		select * from Invoice where status = #{status} and register = #{userid} and is_deleted = 0
+	</select>
+	<select id = "findLikeNumbersorSupplierNameandUid" resultMap="InvoiceMap">
+		select * from Invoice where register = #{userid}
+		    <if test="invoiceNumber != null">  
+                and invoice_number like CONCAT('%','${invoiceNumber}','%' )  
+            </if>  
+            <if test="supplierName != null">  
+                or supplier_name like CONCAT('%','${supplierName}','%' )  
+            </if> 
+		and is_deleted = 0
 	</select>
 	<select id = "findLikeNumbersorSupplierName" resultMap="InvoiceMap">
-		select * from Invoice where invoice_number like %#{invoiceNumber}% or supplier_name like %#{supplierName}%
+		select * from Invoice where 
+		<if test="invoiceNumber != null">  
+                invoice_number like CONCAT('%','${invoiceNumber}','%' )  
+            </if>  
+            <if test="supplierName != null">  
+                or supplier_name like CONCAT('%','${supplierName}','%' )  
+            </if> 
+		and is_deleted = 0
 	</select>
 	<!--修改-->
-	<update id = "enterPass">
-		update Invoice set status = #{status} where id = #{id}
+	<update id = "invoiceMove">
+		update Invoice set status = #{status} where invoice_number = #{invoiceNumber} and status = #{before}
 	</update>
 	<update id = "updateInvoiceInfo">
 		update Invoice set money = #{money},supplier_id = #{supplierId} ,supplier_name = #{supplierName} , invoice_date = #{invoiceDate} where id = #{id}

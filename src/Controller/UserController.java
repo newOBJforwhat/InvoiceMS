@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import Common.CommonInfo;
+import Common.Encoder;
 import Common.Controller.OutputStringController;
 import Enum.DeleteCode;
 import Enum.UserType;
@@ -22,7 +23,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
-@Scope("request")
+@Scope("singleton")
 @RequestMapping(value="/user")
 public class UserController extends OutputStringController{
 	@Autowired
@@ -39,7 +40,6 @@ public class UserController extends OutputStringController{
 	@RequestMapping(value="/noNeedLogin/login",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
 	@ResponseBody 
 	public String login(HttpSession session,String username,String password){
-		System.out.println("username="+username+" password="+password);
 		if(username == null)
 			return failure("请填写用户名");
 		if(password == null)
@@ -56,7 +56,7 @@ public class UserController extends OutputStringController{
 		//登录
 		User loginUser = null;
 		try {
-			loginUser = uService.login(username, password);
+			loginUser = uService.login(username, Encoder.string2MD5(password));
 		} catch (Exception e) {
 			logger.error("登录发生异常:" + e.getMessage());
 			return exception("登录发生异常");
@@ -165,7 +165,7 @@ public class UserController extends OutputStringController{
 		if (!password.equals(passwordAgain))
 			return failure("两次密码输入不正确");
 		try {
-			uService.alterPassword(user.getId(), password);
+			uService.alterPassword(user.getId(), Encoder.string2MD5(password));
 			return success("密码修改成功");
 		} catch (NullPointerException e) {
 			logger.debug("查询不到用户:" + e.getMessage());
@@ -185,7 +185,7 @@ public class UserController extends OutputStringController{
 	@ResponseBody 
 	public String resetUserPassword(@PathVariable("id") long id){
 		try{
-			uService.alterPassword(id, "123456");
+			uService.alterPassword(id, Encoder.string2MD5("123456"));
 		}catch (NullPointerException e) {
 			logger.debug("重置密码出现异常:"+e.getMessage());
 			return failure("找不到用户");
@@ -281,7 +281,7 @@ public class UserController extends OutputStringController{
 		}
 		return success("软删除成功");
 	}
-	
+
 	/**
 	 * 返回所有用户类型
 	 * @return

@@ -27,21 +27,39 @@
     </bean>
     <!--配置拦截器-->
     <mvc:interceptors>
+    	<!--login-->
     	<mvc:interceptor>  
         	<mvc:mapping path="/user/**"/>
-        	<mvc:mapping path="/department/**"/> 
+        	<mvc:mapping path="/invoice/**"/>
+        	<mvc:mapping path="/supplier/**"/>
         	<!-- 需排除拦截的地址 -->
    			<mvc:exclude-mapping path="/user/noNeedLogin/**"/>
           	<bean class="Common.Interceptor.UserLoginInterceptor">
           	</bean>  
-    	</mvc:interceptor> 
+    	</mvc:interceptor>
+    	<!--super user--> 
     	<mvc:interceptor>  
-           <mvc:mapping path="/user/super/**"/>  
-           <mvc:mapping path="/department/**"/>  
+           <mvc:mapping path="/user/super/**"/>
+           <mvc:mapping path="/invoice/super/**"/>
+           <mvc:mapping path="/supplier/super/**"/>  
            <bean class="Common.Interceptor.SuperUserInterceptor" />  
-        </mvc:interceptor> 
+        </mvc:interceptor>
+        <!--staff user-->
+        <mvc:interceptor>  
+           <mvc:mapping path="/invoice/staff/**"/>
+           <bean class="Common.Interceptor.StaffInterceptor" />  
+        </mvc:interceptor>
+        <!--auditing user-->
+        <mvc:interceptor>  
+           <mvc:mapping path="/invoice/auditing/**"/>
+           <bean class="Common.Interceptor.AuditingInterceptor" />  
+        </mvc:interceptor>
+        <!--finance user-->
+        <mvc:interceptor>  
+           <mvc:mapping path="/invoice/finance/**"/>
+           <bean class="Common.Interceptor.FinanceInterceptor" />  
+        </mvc:interceptor>  
     </mvc:interceptors>
-    
     <!--配置跨域-->
    <mvc:cors>  
        <mvc:mapping path="/**" allowed-origins="*" allow-credentials="true" max-age="3000" allowed-methods="GET,POST,OPTIONS"/>  

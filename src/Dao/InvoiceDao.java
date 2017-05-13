@@ -14,10 +14,12 @@ public interface InvoiceDao {
 	public Invoice findById(long id);
 	public Invoice findByNumber(String invoiceNumber);
 	public List<Invoice> findByUserId(long userid);
-	public List<Invoice> findByStatus(int status);
+	public List<Invoice> findByStatusnoUserId(int status);
+	public List<Invoice> findByStatus(@Param("userid") long userid,@Param("status") int status);
 	public List<Invoice> findLikeNumbersorSupplierName(@Param("invoiceNumber") String invoiceNumber,@Param("supplierName") String supplierName);
+	public List<Invoice> findLikeNumbersorSupplierNameandUid(@Param("userid")long userid, @Param("invoiceNumber") String invoiceNumber,@Param("supplierName") String supplierName);
 	//修改
-	public void invoiceMove(@Param("id")int id ,@Param("status") int status);//状态转移
+	public void invoiceMove(@Param("invoiceNumber")String invoiceNumber ,@Param("status") int status,@Param("before") int before);//状态转移
 	public void updateInvoiceInfo(@Param("id") int id, @Param("money") String money,@Param("supplierId") String supplierId,@Param("supplierName") String supplierName,@Param("invoiceDate")  String invoiceDate);
 	public void softDelete(long id);
 	
