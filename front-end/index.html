@@ -16,7 +16,9 @@
   <h4 class="welcome-info">欢迎您,&nbsp;
     <span class="username" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
     <ul class="dropdown-menu" aria-labelledby="dLabel">
-      <li><a href="javascript:void(0)" onclick="logout()">退出登录</a></li>
+      <li class="pointer"><a onclick="openUpdateProfileModal()">更新资料</a></li>
+      <li class="pointer"><a data-toggle="modal" data-target="#alter-password">修改密码</a></li>
+      <li class="pointer"><a onclick="logout()">退出登录</a></li>
     </ul>
   </h4>
 </header>
@@ -69,19 +71,71 @@
   </div>
 </div>
 
+<div id="update-profile" class="modal fade bs-example-modal-sm in" tabindex="-1">
+  <div class="modal-dialog modal-sm" role="document">
+    <form class="modal-content" name="updateProfileForm" onsubmit="updateProfile(event, this)">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title">更新资料</h4>
+      </div>
+      <div class="modal-body">
+        <section class="form-group">
+          <label for="name">姓名:</label>
+          <input id="name" class="form-control" type="text" name="name" required>
+        </section>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary confirm-button" type="submit">确认</button>
+        <button class="btn btn-danger cancel-button" data-dismiss="modal">取消</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="alter-password" class="modal fade bs-example-modal-sm in" tabindex="-1">
+  <div class="modal-dialog modal-sm" role="document">
+    <form class="modal-content" name="alterPasswordForm" onsubmit="alterPassword(event, this)">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title">修改密码</h4>
+      </div>
+      <div class="modal-body">
+        <section class="form-group">
+          <label for="old-password">原密码:</label>
+          <input id="old-password" class="form-control" type="password" name="oldPassword" required>
+        </section>
+        <section class="form-group">
+          <label for="new-password">新密码:</label>
+          <input id="new-password" class="form-control" type="password" name="newPassword" required>
+        </section>
+        <section class="form-group">
+          <label for="repeat-new-password">再次输入新密码:</label>
+          <input id="repeat-new-password" class="form-control" type="password" name="repeatNewPassword" required>
+        </section>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary confirm-button" type="submit">确认</button>
+        <button class="btn btn-danger cancel-button" data-dismiss="modal">取消</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script type="text/javascript" src="./lib/bootstrap.min.js"></script>
 <script type="text/javascript" src="./lib/bootstrap-table.min.js"></script>
 <script type="text/javascript" src="./lib/bootstrap-table-zh-CN.min.js"></script>
 <script type="text/javascript" src="./lib/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="./lib/bootstrap-datepicker.zh-CN.min.js"></script>
 <script type="text/javascript" src="./js/utils.js"></script>
+<script type="text/javascript" src="js/http.js"></script>
 <script src="./js/input.js" type="text/javascript"></script>
 <script src="./js/preview.js" type="text/javascript"></script>
 <script src="./js/verify.js" type="text/javascript"></script>
 <script src="./js/admin.js" type="text/javascript"></script>
 <script type="text/javascript">
   var userInfo = {}
-  var utils = Utils()
 
   $(function () {
     userInfo = {
@@ -89,25 +143,95 @@
       type: sessionStorage.getItem('type'),
       name: sessionStorage.getItem('name')
     }
+
+    if (!userInfo.username) {
+      logout()
+    }
+
     $('.username').html(userInfo.name)
     $.extend($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['zh-CN'])
+
+
+    $('.menu-list').find('.menu-item').each(function (index, elm) {
+      $(elm).show()
+
+      if (userInfo.type === '0') {
+        elm.id === 'verify' && $(elm).hide()
+      }
+
+      if (userInfo.type === '1') {
+        elm.id === 'verify' && $(elm).hide()
+        elm.id === 'admin' && $(elm).hide()
+      }
+
+      if (userInfo.type === '2') {
+        elm.id === 'preview' && $(elm).hide()
+        elm.id === 'admin' && $(elm).hide()
+      }
+
+      if (userInfo.type === '3') {
+        elm.id === 'preview' && $(elm).hide()
+        elm.id === 'admin' && $(elm).hide()
+      }
+    })
 
     var params = location.href.split('=')[1]
     var type = params.split('&&')[0]
     var role = params.split('&&')[1]
-    window[type](utils, role)
+    window[type](role)
     $('.menu-item').each(function (index, elm) {
       $(elm).removeClass('active')
     })
     $('#' + type).addClass('active')
   })
 
+  function openUpdateProfileModal() {
+    var $updateProfileModal = $('#update-profile')
+
+    $updateProfileModal.modal()
+    var form = $updateProfileModal.find('form').get(0)
+    form.name.value = userInfo.name
+  }
+
+  function updateProfile(e, form) {
+    e.preventDefault()
+
+    var newName = form.name.value
+    $http.post('/user/updateInfo', {name: newName})
+      .then(function () {
+        sessionStorage.setItem('name', newName)
+        location.reload(true)
+      })
+  }
+
+  function alterPassword(e, form) {
+    e.preventDefault()
+
+    var invalid = form.newPassword.value !== form.repeatNewPassword.value
+    utils.errorValidate($('#repeat-new-password'), invalid)
+
+    if (invalid) {
+      return
+    }
+
+    $http.post('/user/alterPassword', {})
+  }
+
   function logout() {
-    location.href = 'login.html'
+    $http.get('/user/logout')
+      .then(callback)
+      .fail(callback)
+
+    function callback() {
+      sessionStorage.clear()
+      document.cookie.split(";").forEach(function (c) {
+        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/")
+      })
+      location.href = 'login.html'
+    }
   }
 
   function goVerify() {
-    console.log(userInfo)
     switch (userInfo.type) {
       case '2':
         location.href = './index.html?type=verify&&department'

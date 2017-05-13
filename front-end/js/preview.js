@@ -1,26 +1,31 @@
-function preview (utils) {
+function preview () {
   'use strict'
 
   $('#table-container').html('<table id="table"></table>');
   var $table = $('#table');
+
+  var tableColumns = [{
+    field: 'invoiceId',
+    title: '发票号'
+  }, {
+    field: 'user',
+    title: '录入者'
+  }, {
+    field: 'money',
+    title: '金额'
+  }, {
+    field: 'supplierName',
+    title: '供应商名字'
+  }, {
+    field: 'date',
+    title: '开票日期'
+  }]
+
   $table.bootstrapTable({
     search: true,
-    columns: [{
-      field: 'invoiceId',
-      title: '发票号'
-    }, {
-      field: 'user',
-      title: '姓名'
-    }, {
-      field: 'money',
-      title: '金额'
-    }, {
-      field: 'supplierName',
-      title: '供应商名字'
-    }, {
-      field: 'date',
-      title: '开票日期'
-    }],
+    pagination: true,
+    pageSize: 10,
+    columns: tableColumns,
     data: [{
       invoiceId: '23213213',
       user: '大锤',

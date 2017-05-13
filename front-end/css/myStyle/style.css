@@ -83,6 +83,7 @@ h5 {
 }
 
 .menu-left-bar .menu-item {
+  display: none;
   background-color: #e1edfa;
   padding-left: 20px;
   font-size: 20px;
@@ -112,7 +113,7 @@ h5 {
 }
 
 .main {
-  float: left;
+  display: inline-block;
   margin-left: 10px;
   width: calc(100% - 220px);
 }
@@ -156,9 +157,13 @@ h5 {
 
 .admin-bar {
   position: absolute;
-  padding: 20px 10px;
+  padding: 10px;
 }
 
-#table-container {
-  padding: 10px;
+.search {
+  z-index: -1;
+}
+
+.pointer {
+  cursor: pointer !important;
 }

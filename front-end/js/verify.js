@@ -1,4 +1,4 @@
-function verify(utils, role) {
+function verify(role) {
   'use strict'
 
   $('#table-container').html('<table id="table"></table>')
@@ -31,6 +31,8 @@ function verify(utils, role) {
 
   $table.bootstrapTable({
     search: true,
+    pagination: true,
+    pageSize: 10,
     columns: tableColumns,
     data: [{
       invoiceId: '23213213',
