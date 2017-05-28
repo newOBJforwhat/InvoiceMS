@@ -85,10 +85,20 @@
 	<bean id="invoiceDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
 		<property name="mapperInterface" value="Dao.InvoiceDao"></property>  
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
+	</bean> 
+	<bean id="invoiceItemDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+		<property name="mapperInterface" value="Dao.InvoiceItemDao"></property>  
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
+	</bean> 
+	<bean id="supplierDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+		<property name="mapperInterface" value="Dao.SupplierDao"></property>  
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
 	</bean>  
 	<!--Service config-->
-	<bean id="userService" class="Service.UserService" scope="prototype">
+	<bean id="userService" class="Service.UserService" scope="singleton">
 	</bean>
-	 <bean id="invoiceService" class="Service.InvoiceService" scope="prototype">
-	</bean> 
+	 <bean id="invoiceService" class="Service.InvoiceService" scope="singleton">
+	</bean>
+	<bean id="supplierService" class="Service.SupplierService" scope="singleton">
+	</bean>  
 </beans>

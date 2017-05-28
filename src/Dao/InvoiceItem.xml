@@ -2,5 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace = "Dao.InvoiceDao">
-		
+	<insert id = "addItem">
+		insert into InvoiceItem(invoce_number,solve,advice) values(#{invoiceNumber},#{solve},#{advice})
+	</insert>
+	<select id="findByInvoiceNumber" resultMap="InvoiceItemMap">
+		select * from InvoiceItem where invoce_number = #{invoiceNumber}
+	</select>
+	<resultMap type="InvoiceItem" id="InvoiceItemMap">
+		<id property="id" column="id"></id>
+		<result property="id" column="id"></result>
+		<result property="invoce_number" column="invoiceNumber"></result>
+		<result property="solve" column="solve"></result>
+		<result property="advice" column="advice"></result>
+	</resultMap>
 </mapper>

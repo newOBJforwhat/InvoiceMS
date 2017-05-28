@@ -1,6 +1,16 @@
 package Controller;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -295,6 +305,47 @@ public class UserController extends OutputStringController{
 		jsonResult.put(UserType.AUDITING.getCode(), UserType.AUDITING.getName());
 		jsonResult.put(UserType.FINANCE.getCode(), UserType.FINANCE.getName());
 		return resultSuccess("success", jsonResult.toString());
+	}
+	
+	/**
+	 * 下载模板
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value="/noNeedLogin/downLoad",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
+	public String download(HttpServletRequest request,HttpServletResponse response){
+		File download = new File(CommonInfo.FilePackage+"/hello.txt");
+		try {
+			if(!download.exists())
+				download.createNewFile();
+			FileOutputStream fous = new FileOutputStream(download);
+			fous.write("hello this is a test".getBytes());
+			fous.flush();
+			fous.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		response.setContentType("application/force-download");// 设置强制下载不打开
+		response.addHeader("Content-Disposition", "attachment;fileName=" + download.getName());// 设置文件名
+		byte[] buffer = new byte[1024];
+		try {
+			BufferedInputStream bins = new BufferedInputStream(new FileInputStream(download));
+			OutputStream ous = response.getOutputStream();
+			int len = bins.read(buffer);
+			while(len != -1){
+				ous.write(buffer,0,len);
+				len = bins.read(buffer);
+			}
+			bins.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }
