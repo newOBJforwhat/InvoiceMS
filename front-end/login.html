@@ -67,7 +67,8 @@
       'admin',
       'input',
       'verify&&department',
-      'verify&&financial'
+      'verify&&financial',
+      'suppliers'
     ]
 
     $http.post('/user/noNeedLogin/login', {
@@ -75,7 +76,6 @@
       password: $('#password').val()
     })
       .then(function (resp) {
-        console.log(resp)
         if (resp.status === 1) {
           sessionStorage.setItem('username', resp.result.username)
           sessionStorage.setItem('type', resp.result.type)
