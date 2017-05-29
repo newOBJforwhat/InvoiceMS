@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import Common.CommonInfo;
 import Enum.UserType;
 import Model.User;
+import net.sf.json.JSONObject;
 
 /**
  * 录入角色拦截器
@@ -34,7 +35,13 @@ public class StaffInterceptor implements HandlerInterceptor{
 		logger.debug("录入拦截器.....");
 		User u = (User)arg0.getSession().getAttribute(CommonInfo.userInfo);
 		if(u.getType() != UserType.STAFF.getCode()){
-			arg1.setStatus(401);
+			JSONObject info = new JSONObject();
+			info.put("status", 3);
+			info.put("info","无权访问");
+			arg1.setStatus(200);
+			String req = new String(info.toString().getBytes(),"utf-8");
+			arg1.setContentType("text/html; charset=utf-8");
+			arg1.getWriter().println(req);
 			return false;
 		}
 		else{

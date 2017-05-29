@@ -7,6 +7,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import Common.CommonInfo;
 import Model.User;
+import net.sf.json.JSONObject;
 
 /**
  * 登录过滤器
@@ -36,7 +37,13 @@ public class UserLoginInterceptor implements HandlerInterceptor{
 		if(u == null)
 		{
 			logger.debug("用户未登录");
-			arg1.setStatus(401);
+			JSONObject info = new JSONObject();
+			info.put("status", 3);
+			info.put("info","未登录");
+			arg1.setStatus(200);
+			String req = new String(info.toString().getBytes(),"utf-8");
+			arg1.setContentType("text/html; charset=utf-8");
+			arg1.getWriter().println(req);
 			return false;
 		}
 		else

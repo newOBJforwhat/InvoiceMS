@@ -1,5 +1,6 @@
 package Service;
 
+import java.text.ParseException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import Common.BusinessErrorException;
+import Common.StringUtil;
 import Dao.InvoiceDao;
 import Dao.InvoiceItemDao;
 import Dao.SupplierDao;
@@ -102,6 +104,15 @@ public class InvoiceService {
 			return;
 		iDao.deleteById(id);
 		itDao.addItem(invoice.getInvoiceNumber(), 0, "超级用户删除发票");
+	}
+	
+	//按供应商导出
+	public List<Invoice> bySupplier(String supplier){
+		return iDao.bySupplier(supplier);
+	}
+	//按时间导出
+	public List<Invoice> byTime(String start,String end) throws ParseException{
+		return iDao.byTime(StringUtil.format1.parse(start+" 00:00:00").getTime(),StringUtil.format1.parse(end+" 23:59:59").getTime());
 	}
 	//获得总数 按用户id查询
 	public int findCountByUserId(long userid){

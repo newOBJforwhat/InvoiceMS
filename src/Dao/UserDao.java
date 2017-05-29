@@ -10,6 +10,7 @@ public interface UserDao {
 	public User findByUsernameAndPassword(@Param("username")String username,@Param("password")String password);
 	public User findByUsername(String username);
 	public List<User> findAll();
+	public String findNameById(long id);
 	//插入
 	public int applyUser(User u);
 	//更新

@@ -19,6 +19,8 @@ public class Supplier {
 	private String supplierName;
 	@Column("supplier_number")
 	private String supplierNumber;
+	@Column("register_date")
+	private long registerDate;
 	public long getId() {
 		return id;
 	}
@@ -36,5 +38,11 @@ public class Supplier {
 	}
 	public void setSupplierNumber(String supplierNumber) {
 		this.supplierNumber = supplierNumber;
+	}
+	public long getRegisterDate() {
+		return registerDate;
+	}
+	public void setRegisterDate(long registerDate) {
+		this.registerDate = registerDate;
 	}
 }

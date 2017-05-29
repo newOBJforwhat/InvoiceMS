@@ -8,7 +8,7 @@ import Model.Supplier;
 
 public interface SupplierDao {
 	//添加
-	public void addSupplier(@Param("supplierNumber")String supplierNumber,@Param("supplierName")String supplierName);
+	public void addSupplier(@Param("supplierNumber")String supplierNumber,@Param("supplierName")String supplierName,@Param("registerDate")long registerDate);
 	//查询
 	public List<Supplier> findLikeNumberorName(@Param("supplierNumber")String supplierNumber,@Param("supplierName")String supplierName);
 	public List<Supplier> findListByPage(@Param("pageIndex")int pageIndex,@Param("pageSize")int pageSize);

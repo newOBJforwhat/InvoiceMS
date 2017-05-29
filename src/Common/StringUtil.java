@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 public class StringUtil {
 	public static SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+	public static SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public static String millsToString(long mills){
 		Date date = new Date(mills);
 		return format1.format(date).toString();

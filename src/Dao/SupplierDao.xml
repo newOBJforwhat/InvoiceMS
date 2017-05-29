@@ -27,11 +27,11 @@
 	</select>
 	<!--添加-->
 	<insert id="addSupplier">
-		insert into Supplier(supplier_number,supplier_name) values(#{supplierNumber},#{supplierName})
+		insert into Supplier(supplier_number,supplier_name,register_date) values(#{supplierNumber},#{supplierName},#{registerDate})
 	</insert>
 	<!--删除-->
 	<delete id="deleteByNumber">
-		delete Supplier where id = #{id}
+		delete from Supplier where id = #{id}
 	</delete>
 	<!--修改-->
 	<update id="alterById">
@@ -41,5 +41,6 @@
 		<id property="id" column="id"></id>
 		<result property="supplierName" column="supplier_name"></result>
 		<result property="supplierNumber" column="supplier_number"></result>
+		<result property="registerDate" column="register_date"></result>
 	</resultMap>
 </mapper>

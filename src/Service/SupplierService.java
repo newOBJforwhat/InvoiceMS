@@ -21,7 +21,7 @@ public class SupplierService {
 		{
 			throw new BusinessErrorException("供应商已存在："+supplierNumber);
 		}
-		sDao.addSupplier(supplierNumber, supplierName);
+		sDao.addSupplier(supplierNumber, supplierName,System.currentTimeMillis());
 	}
 	@Transactional(rollbackFor=Exception.class,readOnly = false, propagation = Propagation.REQUIRED,timeout=15)
 	public void deleteSupplier(long id){

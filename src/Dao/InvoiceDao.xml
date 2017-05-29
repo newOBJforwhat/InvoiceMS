@@ -35,43 +35,51 @@
 	<select id = "findLikeNumbersorSupplierNameandUid" resultMap="InvoiceMap">
 		select * from Invoice where register = #{userid}
 		    <if test="invoiceNumber != null">  
-                and invoice_number like CONCAT('%','${invoiceNumber}','%' )  
+                and invoice_number like CONCAT('%','#{invoiceNumber}','%' )  
             </if>  
             <if test="supplierName != null">  
-                or supplier_name like CONCAT('%','${supplierName}','%' )  
+                or supplier_name like CONCAT('%','#{supplierName}','%' )  
             </if> 
 		and is_deleted = 0 limit #{pageIndex},#{pageSize}
 	</select>
 	<select id = "findCountLikeNumbersorSupplierNameandUid" resultType = "int">
 		select count(*) from Invoice where register = #{userid}
 		    <if test="invoiceNumber != null">  
-                and invoice_number like CONCAT('%','${invoiceNumber}','%' )  
+                and invoice_number like CONCAT('%','#{invoiceNumber}','%' )  
             </if>  
             <if test="supplierName != null">  
-                or supplier_name like CONCAT('%','${supplierName}','%' )  
+                or supplier_name like CONCAT('%','#{supplierName}','%' )  
             </if> 
 		and is_deleted = 0 
 	</select>
 	<select id = "findLikeNumbersorSupplierName" resultMap="InvoiceMap">
 		select * from Invoice where 
 		<if test="invoiceNumber != null">  
-                invoice_number like CONCAT('%','${invoiceNumber}','%' )  
+                invoice_number like CONCAT('%','#{invoiceNumber}','%' )  
             </if>  
             <if test="supplierName != null">  
-                or supplier_name like CONCAT('%','${supplierName}','%' )  
+                or supplier_name like CONCAT('%','#{supplierName}','%' )  
             </if> 
 		and is_deleted = 0 limit #{pageIndex},#{pageSize}
 	</select>
 	<select id = "findCountLikeNumbersorSupplierName" resultType="int">
 		select count(*) from Invoice where 
 		<if test="invoiceNumber != null">  
-                invoice_number like CONCAT('%','${invoiceNumber}','%' )  
+                invoice_number like CONCAT('%','#{invoiceNumber}','%' )  
             </if>  
             <if test="supplierName != null">  
-                or supplier_name like CONCAT('%','${supplierName}','%' )  
+                or supplier_name like CONCAT('%','#{supplierName}','%' )  
             </if> 
 		and is_deleted = 0 
 	</select>
+	<select id = "byTime" resultMap="InvoiceMap">
+		select * from Invoice where register_date &gt; #{start} and register_date &lt; #{end} and is_deleted = 0 
+	</select>
+	<!--导出查询-->
+	<select id = "bySupplier" resultMap="InvoiceMap">
+		select * from Invoice where supplier_name = #{supplier} and is_deleted = 0 
+	</select>
+	
 	<!--修改-->
 	<update id = "invoiceMove">
 		update Invoice set status = #{status} where invoice_number = #{invoiceNumber} and status = #{before}

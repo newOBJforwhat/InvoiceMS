@@ -17,6 +17,9 @@
 	<select id="findAll" resultMap="UserMap">
 		select * from User order by id 
 	</select>
+	<select id = "findNameById" resultType="String">
+		select name from User where id = #{id}
+	</select>
 	<!--插入-->
 	<insert id="applyUser" parameterType="User" useGeneratedKeys="true" keyProperty="id" >
 		insert into User(username,password,name,type,is_deleted,create_time) 
