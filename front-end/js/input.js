@@ -8,7 +8,7 @@ function input() {
     '    </header>'+
     '    <div class="form-group">'+
     '      <label for="invoice-id">发票号:</label>'+
-    '      <input id="invoice-id" class="form-control" type="text" name="invoiceId" required>'+
+    '      <input id="invoice-id" class="form-control" type="text" name="invoiceNumber" required>'+
     '    </div>'+
     '    <div class="form-group">'+
     '      <label for="money">金额:</label>'+
@@ -38,7 +38,8 @@ function input() {
 
   $('#date').datepicker({
     format: 'yyyy年mm月dd日',
-    language: 'zh-CN'
+    language: 'zh-CN',
+    autoclose: true
   });
 
   $(document).on('changeDate', function (event) {
@@ -55,14 +56,28 @@ function input() {
       return;
     }
 
-    $.post('/invoice/new', {
-      invoiceId: this.invoiceId.value,
+    $http.post('/invoice/staff/enterInvoice', {
+      invoiceNumber: this.invoiceNumber.value,
       money: this.money.value,
       supplierName: this.supplierName.value,
-      date: date.toJSON()
+      invoiceDate: date.toJSON()
     })
-      .done(function () {
-        location.href = 'success.html';
+      .then(function (resp) {
+        var $modal = $('#success-modal')
+
+        if (resp.status === 1) {
+          utils.setModal($modal, {
+            header: '操作成功',
+            body: '发票信息已提交，请等待审核'
+          })
+          $modal.modal()
+        } else {
+          utils.setModal($modal, {
+            header: '操作失败',
+            body: resp.info
+          })
+          $modal.modal()
+        }
       })
       .fail(function () {
         $('.fail-modal-body').html('提交失败, 请重试, 多次失败请联系管理员');

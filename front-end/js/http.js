@@ -20,7 +20,27 @@ var $http = (function () {
 
     return $.ajax(options)
       .then(function (resp) {
-        return JSON.parse(resp)
+        var result = JSON.parse(resp)
+
+        if (result.status === 2) {
+          toastr.error(result.info)
+        } else if (result.status === 3) {
+          toastr.error(result.info)
+          setTimeout(function () {
+            logout()
+          }, 5000)
+        }
+
+        return result
+      }, function () {
+        if (navigator.onLine) {
+          toastr.error('出现异常，请尝试重新登录')
+          setTimeout(function () {
+            logout()
+          }, 5000)
+        } else {
+          toastr.error('网络故障，请联系管理员处理')
+        }
       })
   }
 

@@ -23,7 +23,6 @@
       <input id="password" class="form-control" type="password" required>
     </div>
     <footer class="login-footer">
-      <!--<label for="remember-me">记住我</label><input id="remember-me" type="checkbox">-->
       <button class="btn btn-primary" type="submit">登录</button>
     </footer>
   </form>
@@ -47,6 +46,19 @@
 <script type="text/javascript" src="./lib/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/http.js"></script>
 <script type="text/javascript">
+  $(function () {
+    var type = [
+      'admin',
+      'input',
+      'verify&&department',
+      'verify&&financial'
+    ]
+
+    if (sessionStorage.getItem('username') && sessionStorage.getItem('type') && sessionStorage.getItem('name')) {
+      location.href = 'index.html?type=' + type[sessionStorage.getItem('type')]
+    }
+  })
+
   function login(e) {
     e.preventDefault();
 
@@ -63,6 +75,7 @@
       password: $('#password').val()
     })
       .then(function (resp) {
+        console.log(resp)
         if (resp.status === 1) {
           sessionStorage.setItem('username', resp.result.username)
           sessionStorage.setItem('type', resp.result.type)
