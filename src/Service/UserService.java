@@ -102,5 +102,8 @@ public class UserService {
 	public void setuDao(UserDao uDao) {
 		this.uDao = uDao;
 	}
-	
+	//获取名字
+	public String getName(long id){
+		return uDao.findNameById(id);
+	}
 }

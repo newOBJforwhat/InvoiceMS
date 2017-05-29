@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import Common.CommonInfo;
 import Enum.UserType;
 import Model.User;
+import net.sf.json.JSONObject;
 
 public class SuperUserInterceptor implements HandlerInterceptor{
 	private static Logger logger = Logger.getLogger(SuperUserInterceptor.class);
@@ -32,7 +33,13 @@ public class SuperUserInterceptor implements HandlerInterceptor{
 		if(u.getType() != UserType.SUPER.getCode())
 		{
 			logger.debug("非超级用户无法访问");
-			arg1.setStatus(401);
+			JSONObject info = new JSONObject();
+			info.put("status", 3);
+			info.put("info","无权访问");
+			arg1.setStatus(200);
+			String req = new String(info.toString().getBytes(),"utf-8");
+			arg1.setContentType("text/html; charset=utf-8");
+			arg1.getWriter().println(req);
 			return false;
 		}
 		else

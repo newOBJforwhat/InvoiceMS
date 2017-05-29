@@ -13,4 +13,8 @@ public class CommonInfo {
 	public static String userInfo = "USERINFO";
 	
 	public static String projName = "InvoiceMS";
+	//分页查询参数
+	public static int pageSize = 10;
+	//放置下载文件
+	public static String FilePackage = "";
 }

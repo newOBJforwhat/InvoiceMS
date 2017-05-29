@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-	<mapper namespace="Dao.Supplier">
-		
-	</mapper>
+<mapper namespace="Dao.SupplierDao">
+	<!--查找-->
+	<select id="findLikeNumberorName" resultMap = "SupplierMap">
+		select * from Supplier where 
+		<if test="supplierNumber != null">  
+           supplier_number like CONCAT('%','${supplierNumber}','%' )  
+        </if> 
+        <if test="supplierName != null">  
+            or supplier_name like CONCAT('%','${supplierName}','%' )  
+        </if>
+        limit 5 
+	</select>
+	<select id="findListByPage" resultMap = "SupplierMap">
+		select * from Supplier limit #{pageIndex},#{pageSize}
+	</select>
+	<select id = "findCountListByPage" resultType = "int">
+		select count(*) from Supplier
+	</select>
+	<select id="findByNumber" resultMap = "SupplierMap">
+		select * from Supplier where supplier_number = #{supplierNumber}
+	</select>
+	<select id="findById" resultMap = "SupplierMap">
+		select * from Supplier where supplier_number = #{id}
+	</select>
+	<!--添加-->
+	<insert id="addSupplier">
+		insert into Supplier(supplier_number,supplier_name,register_date) values(#{supplierNumber},#{supplierName},#{registerDate})
+	</insert>
+	<!--删除-->
+	<delete id="deleteByNumber">
+		delete from Supplier where id = #{id}
+	</delete>
+	<!--修改-->
+	<update id="alterById">
+		update Supplier set supplier_name = #{supplierName} where id = #{id}
+	</update>
+	<resultMap type="Supplier" id="SupplierMap">
+		<id property="id" column="id"></id>
+		<result property="supplierName" column="supplier_name"></result>
+		<result property="supplierNumber" column="supplier_number"></result>
+		<result property="registerDate" column="register_date"></result>
+	</resultMap>
+</mapper>

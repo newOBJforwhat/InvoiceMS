@@ -8,6 +8,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import org.apache.log4j.Logger;
 
+import Common.CommonInfo;
 import Common.Encoder;
 import Common.InitDataBases;
 import Enum.UserType;
@@ -38,6 +39,11 @@ public class InitializationListener implements ServletContextListener {
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent arg0)  {
+    	CommonInfo.FilePackage = this.getClass().getClassLoader().getResource("/").getPath()+"/WEB-INF/fildDownload";
+		File pkg = new File(CommonInfo.FilePackage);
+		if(!pkg.exists())
+			pkg.mkdirs();
+		
     	File f = new File(this.getClass().getClassLoader().getResource("/").getPath()+"/Model");
     	File[] fs = f.listFiles();
     	List<String> tables = new ArrayList<>();
