@@ -167,3 +167,11 @@ h5 {
 .pointer {
   cursor: pointer !important;
 }
+
+#supplier-list {
+  width: 100%;
+}
+
+.supplier-list-item {
+
+}

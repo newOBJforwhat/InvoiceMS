@@ -177,11 +177,6 @@
     $('.menu-list').find('.menu-item').each(function (index, elm) {
       $(elm).show()
 
-      if (userInfo.type === '0') {
-        elm.id === 'input' && $(elm).hide()
-        elm.id === 'verify' && $(elm).hide()
-      }
-
       if (userInfo.type === '1') {
         elm.id === 'verify' && $(elm).hide()
         elm.id === 'admin' && $(elm).hide()

@@ -95,7 +95,7 @@ function suppliers() {
 
   $http.get('/supplier/super/findList/1')
     .then(function (resp) {
-      resp.result.forEach(function (supplier) {
+      resp.result.data.forEach(function (supplier) {
         $.extend(supplier, {
           operation: ['<button class="btn btn-warning update-info">更新信息</button>',
             '&nbsp;',
@@ -104,7 +104,7 @@ function suppliers() {
         })
       })
 
-      supplierList = resp.result
+      supplierList = resp.result.data
       $table.bootstrapTable('load', supplierList)
 
       $table.find('.update-info').each(function (index, elm) {
