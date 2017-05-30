@@ -47,11 +47,13 @@
         <!--staff user-->
         <mvc:interceptor>  
            <mvc:mapping path="/invoice/staff/**"/>
+           <mvc:mapping path="/user/staff/**"/>
            <bean class="Common.Interceptor.StaffInterceptor" />  
         </mvc:interceptor>
         <!--auditing user-->
         <mvc:interceptor>  
            <mvc:mapping path="/invoice/auditing/**"/>
+            <mvc:mapping path="/user/auditing/**"/>
            <bean class="Common.Interceptor.AuditingInterceptor" />  
         </mvc:interceptor>
         <!--finance user-->

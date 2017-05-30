@@ -6,9 +6,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -24,7 +22,6 @@ import Common.BusinessErrorException;
 import Common.CommonInfo;
 import Common.StringUtil;
 import Common.Controller.OutputStringController;
-import Enum.InvoiceStatus;
 import Model.Supplier;
 import Service.SupplierService;
 import net.sf.json.JSONArray;
@@ -107,18 +104,15 @@ public class SupplierController extends OutputStringController{
 	 * @param name
 	 * @return
 	 */
-	@RequestMapping(value="/findLike/{numberOrName}",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
-	public String findLike(@PathVariable("numberOrName")String numberOrName){
-		if(numberOrName == null || "".equals(numberOrName))
-			return failure("参数为空");
-		
+	@RequestMapping(value="/findLike",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
+	public String findLike(String numberOrName){
 		try{
 			List<Supplier> result = sService.findLikeNumberOrName(numberOrName, numberOrName);
 			JSONArray arrResult = new JSONArray();
 			for(Supplier su : result){
 				JSONObject objResult = new JSONObject();
 				objResult.put("id", su.getId());
-				objResult.put("number", su.getSupplierName());
+				objResult.put("number", su.getSupplierNumber());
 				objResult.put("name", su.getSupplierName());
 				arrResult.add(objResult);
 			}
@@ -156,7 +150,7 @@ public class SupplierController extends OutputStringController{
 			data.put("total",total);
 			data.put("page", pageIndex);
 			data.put("totalPage",total%CommonInfo.pageSize == 0?(total/CommonInfo.pageSize):((total/CommonInfo.pageSize) + 1));
-			return resultSuccess("查询成功", arrResult.toString());
+			return resultSuccess("查询成功", data.toString());
 		}catch (Exception e) {
 			logger.error("查询异常:"+e.getMessage());
 			return exception("查询异常");

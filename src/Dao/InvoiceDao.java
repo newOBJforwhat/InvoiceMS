@@ -28,8 +28,9 @@ public interface InvoiceDao {
 	public List<Invoice> bySupplier(String supplier);
 	public List<Invoice> byTime(@Param("start")long start,@Param("end")long end);
 	//修改
-	public void invoiceMove(@Param("invoiceNumber")String invoiceNumber ,@Param("status") int status,@Param("before") int before);//状态转移
-	public void updateInvoiceInfo(@Param("id") int id, @Param("money") String money,@Param("supplierId") String supplierId,@Param("supplierName") String supplierName,@Param("invoiceDate")  String invoiceDate);
+	public void auditingTransport(@Param("invoiceNumber")String invoiceNumber ,@Param("status") int status,@Param("auditing") long auditing,@Param("before") int before);//提交业务员状态转移
+	public void statusMove(@Param("invoiceNumber")String invoiceNumber ,@Param("status") int status,@Param("before") int before);//普通状态转移
+	public void updateInvoiceInfo(@Param("id") long id, @Param("invoiceNumber") String invoiceNumber,@Param("money") double money,@Param("supplierId") long supplierId,@Param("supplierName") String supplierName,@Param("invoiceDate")  String invoiceDate);
 	public void softDelete(@Param("id") long id,@Param("userid") long userid);
 	
 }

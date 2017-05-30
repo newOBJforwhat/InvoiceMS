@@ -35,7 +35,7 @@ public class FinanceInterceptor implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2) throws Exception {
 		logger.debug("财务拦截器.....");
 		User u = (User)arg0.getSession().getAttribute(CommonInfo.userInfo);
-		if(u.getType() != UserType.FINANCE.getCode()){
+		if(u.getType() != UserType.FINANCE.getCode() || u.getType() != UserType.SUPER.getCode()){
 			JSONObject info = new JSONObject();
 			info.put("status", 3);
 			info.put("info","无权访问");

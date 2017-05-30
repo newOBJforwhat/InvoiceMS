@@ -1,16 +1,7 @@
 package Controller;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -236,7 +227,10 @@ public class UserController extends OutputStringController{
 	 */
 	@RequestMapping(value="/super/deleteUser/{id}",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
 	@ResponseBody 
-	public String deleteUser(@PathVariable("id")long id){
+	public String deleteUser(@PathVariable("id")long id,HttpSession session){
+		User u = getCurrentUser(session);
+		if(id == u.getId())
+			return failure("无法删除");
 		try{
 			uService.deleteUser(id);
 		}catch (NullPointerException e) {
@@ -306,6 +300,51 @@ public class UserController extends OutputStringController{
 		jsonResult.put(UserType.FINANCE.getCode(), UserType.FINANCE.getName());
 		return resultSuccess("success", jsonResult.toString());
 	}
+	/**
+	 * 获取业务员列表
+	 * @return
+	 */
+	@RequestMapping(value="/staff/getAuditing",produces="text/html;charset=UTF-8",method=RequestMethod.GET)
+	@ResponseBody 
+	public String getAuditing(){
+		try{
+			List<User> auditings = uService.getCharacter(UserType.AUDITING.getCode());
+			JSONArray jarr = new JSONArray();
+			for(User u : auditings){
+				JSONObject jobj = new JSONObject();
+				jobj.put("uid", u.getId());
+				jobj.put("name",u.getName());
+				jarr.add(jobj);
+			}
+			return resultSuccess("", jarr.toString());
+		}catch (Exception e) {
+			logger.error("异常:"+e.getMessage());
+			return exception("出现异常:"+e.getMessage());
+		}
+	}
+	/**
+	 * 获取财务列表
+	 * @return
+	 */
+	@RequestMapping(value="/auditing/getAuditing",produces="text/html;charset=UTF-8",method=RequestMethod.GET)
+	@ResponseBody 
+	public String getFinance(){
+		try{
+			List<User> auditings = uService.getCharacter(UserType.FINANCE.getCode());
+			JSONArray jarr = new JSONArray();
+			for(User u : auditings){
+				JSONObject jobj = new JSONObject();
+				jobj.put("uid", u.getId());
+				jobj.put("name",u.getName());
+				jarr.add(jobj);
+			}
+			return resultSuccess("", jarr.toString());
+		}catch (Exception e) {
+			logger.error("异常:"+e.getMessage());
+			return exception("出现异常:"+e.getMessage());
+		}
+	}
+	
 	
 	/**
 	 * 下载模板
@@ -313,39 +352,39 @@ public class UserController extends OutputStringController{
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value="/noNeedLogin/downLoad",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
-	public String download(HttpServletRequest request,HttpServletResponse response){
-		File download = new File(CommonInfo.FilePackage+"/hello.txt");
-		try {
-			if(!download.exists())
-				download.createNewFile();
-			FileOutputStream fous = new FileOutputStream(download);
-			fous.write("hello this is a test".getBytes());
-			fous.flush();
-			fous.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		response.setContentType("application/force-download");// 设置强制下载不打开
-		response.addHeader("Content-Disposition", "attachment;fileName=" + download.getName());// 设置文件名
-		byte[] buffer = new byte[1024];
-		try {
-			BufferedInputStream bins = new BufferedInputStream(new FileInputStream(download));
-			OutputStream ous = response.getOutputStream();
-			int len = bins.read(buffer);
-			while(len != -1){
-				ous.write(buffer,0,len);
-				len = bins.read(buffer);
-			}
-			bins.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+//	@RequestMapping(value="/noNeedLogin/downLoad",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
+//	public String download(HttpServletRequest request,HttpServletResponse response){
+//		File download = new File(CommonInfo.FilePackage+"/hello.txt");
+//		try {
+//			if(!download.exists())
+//				download.createNewFile();
+//			FileOutputStream fous = new FileOutputStream(download);
+//			fous.write("hello this is a test".getBytes());
+//			fous.flush();
+//			fous.close();
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		response.setContentType("application/force-download");// 设置强制下载不打开
+//		response.addHeader("Content-Disposition", "attachment;fileName=" + download.getName());// 设置文件名
+//		byte[] buffer = new byte[1024];
+//		try {
+//			BufferedInputStream bins = new BufferedInputStream(new FileInputStream(download));
+//			OutputStream ous = response.getOutputStream();
+//			int len = bins.read(buffer);
+//			while(len != -1){
+//				ous.write(buffer,0,len);
+//				len = bins.read(buffer);
+//			}
+//			bins.close();
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
 	
 }

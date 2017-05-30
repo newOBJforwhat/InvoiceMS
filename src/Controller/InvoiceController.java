@@ -28,8 +28,10 @@ import Common.Controller.OutputStringController;
 import Enum.InvoiceStatus;
 import Form.InvoiceForm;
 import Model.Invoice;
+import Model.Supplier;
 import Model.User;
 import Service.InvoiceService;
+import Service.SupplierService;
 import Service.UserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -42,6 +44,8 @@ public class InvoiceController extends OutputStringController{
 	private InvoiceService iService;
 	@Autowired
 	private UserService uService;
+	@Autowired
+	private SupplierService sService;
 	private static Logger logger = Logger.getLogger(InvoiceController.class);
 	/**
 	 *	录入发票的接口
@@ -151,7 +155,7 @@ public class InvoiceController extends OutputStringController{
 	@RequestMapping(value="/staff/forward",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
 	public String staffForword(String invoiceNumber,HttpSession session){
 		try{
-			iService.setInvoiceStatus(invoiceNumber, InvoiceStatus.CHECKED.getCode(),InvoiceStatus.ENTERING.getCode(),getCurrentUser(session).getId());
+			iService.normalTransport(invoiceNumber,InvoiceStatus.CHECKED.getCode(),InvoiceStatus.ENTERING.getCode(),getCurrentUser(session).getId());
 		}catch (Exception e) {
 			return exception("转移到业务接口异常");
 		}
@@ -165,7 +169,7 @@ public class InvoiceController extends OutputStringController{
 	@RequestMapping(value="/auditing/forward",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
 	public String auditingForward(String invoiceNumber,HttpSession session){
 		try {
-			iService.setInvoiceStatus(invoiceNumber, InvoiceStatus.FINANCE.getCode(),InvoiceStatus.CHECKED.getCode(),getCurrentUser(session).getId());
+			iService.normalTransport(invoiceNumber,InvoiceStatus.FINANCE.getCode(),InvoiceStatus.CHECKED.getCode(),getCurrentUser(session).getId());
 		} catch (Exception e) {
 			return exception("转移到财务接口异常");
 		}
@@ -179,7 +183,7 @@ public class InvoiceController extends OutputStringController{
 	@RequestMapping(value="/auditing/back",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
 	public String back(String invoiceNumber,HttpSession session){
 		try{
-			iService.setInvoiceStatus(invoiceNumber, InvoiceStatus.ENTERING.getCode(),InvoiceStatus.CHECKED.getCode(),getCurrentUser(session).getId());
+			iService.normalTransport(invoiceNumber,InvoiceStatus.ENTERING.getCode(),InvoiceStatus.CHECKED.getCode(),getCurrentUser(session).getId());
 		}catch (Exception e) {
 			return exception("回退到录入异常");
 		}
@@ -193,7 +197,7 @@ public class InvoiceController extends OutputStringController{
 	@RequestMapping(value="/finance/final",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
 	public String financeFinal(String invoiceNumber,HttpSession session){
 		try{
-			iService.setInvoiceStatus(invoiceNumber, InvoiceStatus.FINAL.getCode(),InvoiceStatus.FINANCE.getCode(),getCurrentUser(session).getId());
+			iService.normalTransport(invoiceNumber, InvoiceStatus.FINAL.getCode(),InvoiceStatus.FINANCE.getCode(),getCurrentUser(session).getId());
 		}catch (Exception e) {
 			return exception("终结财务发票异常");
 		}
@@ -206,7 +210,7 @@ public class InvoiceController extends OutputStringController{
 	@RequestMapping(value="/finance/back",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
 	public String financeBack(String invoiceNumber,HttpSession session){
 		try{
-			iService.setInvoiceStatus(invoiceNumber, InvoiceStatus.CHECKED.getCode(),InvoiceStatus.FINANCE.getCode(),getCurrentUser(session).getId());
+			iService.normalTransport(invoiceNumber, InvoiceStatus.CHECKED.getCode(),InvoiceStatus.FINANCE.getCode(),getCurrentUser(session).getId());
 		}catch (Exception e) {
 			return exception("回退到业务部门异常");
 		}
@@ -368,6 +372,7 @@ public class InvoiceController extends OutputStringController{
 	 * @return
 	 * @throws UnsupportedEncodingException 
 	 */
+	@SuppressWarnings("deprecation")
 	@RequestMapping(value="/export/{opt}",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
 	public String export(HttpServletResponse response,HttpSession session,@PathVariable("opt")String opt,String supplierName,Integer status,String start,String end) throws UnsupportedEncodingException{
 		if("".equals(opt) || opt == null)
@@ -428,7 +433,8 @@ public class InvoiceController extends OutputStringController{
 				row.createCell(2).setCellValue(bySupplierList.get(i).getSupplierName()); 
 				row.createCell(3).setCellValue(InvoiceStatus.getNameByCode(bySupplierList.get(i).getStatus() )); 
 				row.createCell(4).setCellValue(bySupplierList.get(i).getInvoiceDate()); 
-				row.createCell(5).setCellValue(uService.getName(bySupplierList.get(i).getRegister())); 
+				String name = uService.getName(bySupplierList.get(i).getRegister());
+				row.createCell(5).setCellValue(name == null?"已删除用户":name); 
 				row.createCell(6).setCellValue(StringUtil.format1.format(new Date(bySupplierList.get(i).getRegisterDate())));
 			}
 			response.setContentType("application/force-download");// 设置强制下载不打开
@@ -464,7 +470,8 @@ public class InvoiceController extends OutputStringController{
 				row.createCell(2).setCellValue(bystatus.get(i).getSupplierName()); 
 				row.createCell(3).setCellValue(InvoiceStatus.getNameByCode(bystatus.get(i).getStatus() )); 
 				row.createCell(4).setCellValue(bystatus.get(i).getInvoiceDate()); 
-				row.createCell(5).setCellValue(uService.getName(bystatus.get(i).getRegister())); 
+				String name = uService.getName(bystatus.get(i).getRegister());
+				row.createCell(5).setCellValue(name == null?"已删除用户":name); 
 				row.createCell(6).setCellValue(StringUtil.format1.format(new Date(bystatus.get(i).getRegisterDate())));
 			}
 			response.setContentType("application/force-download");// 设置强制下载不打开
@@ -509,7 +516,8 @@ public class InvoiceController extends OutputStringController{
 				row.createCell(2).setCellValue(byTime.get(i).getSupplierName()); 
 				row.createCell(3).setCellValue(InvoiceStatus.getNameByCode(byTime.get(i).getStatus() )); 
 				row.createCell(4).setCellValue(byTime.get(i).getInvoiceDate()); 
-				row.createCell(5).setCellValue(uService.getName(byTime.get(i).getRegister())); 
+				String name  = uService.getName(byTime.get(i).getRegister());
+				row.createCell(5).setCellValue(name == null?"已删除用户":name); 
 				row.createCell(6).setCellValue(StringUtil.format1.format(new Date(byTime.get(i).getRegisterDate())));
 			}
 			response.setContentType("application/force-download");// 设置强制下载不打开
@@ -530,5 +538,43 @@ public class InvoiceController extends OutputStringController{
 		} catch (IOException ioe) {
 		}
 		return null;
+	}
+	/**
+	 * 更新发票信息
+	 * @param id
+	 * @param invoiceNumber
+	 * @param money
+	 * @param supplierId
+	 * @param supplierName
+	 * @param invoiceDate
+	 * @return
+	 */
+	@RequestMapping(value="/updateInfo",produces="text/html;charset=UTF-8",method = RequestMethod.POST)
+	public String alterInvoiceInfo(long id,String invoiceNumber,double money,long supplierId,String supplierName,String invoiceDate){
+		if(id == 0)
+			return failure("发票id为空");
+		else if("".equals(invoiceNumber) || invoiceNumber == null)
+			return failure("发票编号为空");
+		else if(money == 0)
+			return failure("发票金额为0");
+		else if(supplierId == 0)
+			return failure("供应商id为空");
+		else if("".equals(supplierName) || supplierName == null)
+			return failure("供应商名字为空");
+		else if("".equals(invoiceDate) || invoiceDate == null)
+			return failure("发票日期为空");
+		
+		try{
+			Supplier supplier = sService.getById(supplierId);
+			if(supplier == null)
+				return failure("供应商不存在");
+			if(!supplier.getSupplierName().equals(supplierName))
+				return failure("供应商id与名称不符");
+			iService.updateInvoce(id, invoiceNumber, money, supplierId, supplierName, invoiceDate);
+			return success("更新成功");
+		}catch (Exception e) {
+			logger.error("出现异常："+e.getMessage());
+			return exception("出现异常");
+		}
 	}
 }

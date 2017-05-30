@@ -11,6 +11,7 @@ public interface UserDao {
 	public User findByUsername(String username);
 	public List<User> findAll();
 	public String findNameById(long id);
+	public List<User> getCharacter(int type);
 	//插入
 	public int applyUser(User u);
 	//更新

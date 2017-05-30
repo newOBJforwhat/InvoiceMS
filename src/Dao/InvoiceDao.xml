@@ -81,11 +81,14 @@
 	</select>
 	
 	<!--修改-->
-	<update id = "invoiceMove">
+	<update id = "auditingTransport">
+		update Invoice set status = #{status},auditing = #{auditing} where invoice_number = #{invoiceNumber} and status = #{before}
+	</update>
+	<update id = "statusMove">
 		update Invoice set status = #{status} where invoice_number = #{invoiceNumber} and status = #{before}
 	</update>
 	<update id = "updateInvoiceInfo">
-		update Invoice set money = #{money},supplier_id = #{supplierId} ,supplier_name = #{supplierName} , invoice_date = #{invoiceDate} where id = #{id}
+		update Invoice set invoice_number = #{invoiceNumber},money = #{money},supplier_id = #{supplierId} ,supplier_name = #{supplierName} , invoice_date = #{invoiceDate} where id = #{id}
 	</update>
 	<update id="softDelete">
 		update Invoice set is_deleted = 1 where id = #{id}
@@ -104,5 +107,6 @@
 		<result property="invoiceDate" column="invoice_date"></result>
 		<result property="register" column="register"></result>
 		<result property="registerDate" column="register_date"></result>
+		<result property="isDeleted" column="is_deleted"></result>
 	</resultMap>
 </mapper>
