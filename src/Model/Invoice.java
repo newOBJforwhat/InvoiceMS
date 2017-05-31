@@ -89,5 +89,4 @@ public class Invoice {
 	public void setIsDeleted(int isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-	
 }

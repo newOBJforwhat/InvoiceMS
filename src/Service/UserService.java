@@ -99,6 +99,10 @@ public class UserService {
 		else
 			throw new NullPointerException("未找到用户id："+id);
 	}
+	@Transactional(rollbackFor=Exception.class,readOnly = true, propagation = Propagation.REQUIRED,timeout=15)
+	public List<User> getCharacter(int type){
+		return uDao.getCharacter(type);
+	}
 	public void setuDao(UserDao uDao) {
 		this.uDao = uDao;
 	}

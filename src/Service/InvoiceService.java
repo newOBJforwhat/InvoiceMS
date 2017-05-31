@@ -71,11 +71,10 @@ public class InvoiceService {
 		return invoice;
 	}
 	@Transactional(isolation=Isolation.REPEATABLE_READ,rollbackFor=Exception.class,readOnly = false, propagation = Propagation.REQUIRED,timeout=15)
-	public void setInvoiceStatus(String invoiceNumber,int status,int before,long userid){
-		iDao.invoiceMove(invoiceNumber, status , before);
+	public void normalTransport(String invoiceNumber,int status,int before,long userid){
+		iDao.statusMove(invoiceNumber, status , before);
 		itDao.addItem(invoiceNumber, userid, "发票状态修改："+InvoiceStatus.getNameByCode(before)+" -> "+InvoiceStatus.getNameByCode(status));
 	}
-
 	@Transactional(rollbackFor=Exception.class,readOnly = true, propagation = Propagation.REQUIRED,timeout=15)
 	public List<Invoice> findByInvoiceNumberOrSupplier(String invoiceNumber,String supplier,int pageIndex,int pageSize){
 		return iDao.findLikeNumbersorSupplierName(invoiceNumber, supplier,(pageIndex - 1)*pageSize,pageSize);
@@ -105,7 +104,10 @@ public class InvoiceService {
 		iDao.deleteById(id);
 		itDao.addItem(invoice.getInvoiceNumber(), 0, "超级用户删除发票");
 	}
-	
+	@Transactional(isolation=Isolation.REPEATABLE_READ,rollbackFor=Exception.class,readOnly = false, propagation = Propagation.REQUIRED,timeout=15)
+	public void updateInvoce(long id,String invoiceNumber,double money,long supplierId,String supplierName,String invoiceDate){
+		iDao.updateInvoiceInfo(id, invoiceNumber, money, supplierId, supplierName, invoiceDate);
+	}
 	//按供应商导出
 	public List<Invoice> bySupplier(String supplier){
 		return iDao.bySupplier(supplier);

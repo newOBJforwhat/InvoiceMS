@@ -20,6 +20,9 @@
 	<select id = "findNameById" resultType="String">
 		select name from User where id = #{id}
 	</select>
+	<select id = "getCharacter" resultMap="UserMap">
+		select * from User where type = #{type}
+	</select>
 	<!--插入-->
 	<insert id="applyUser" parameterType="User" useGeneratedKeys="true" keyProperty="id" >
 		insert into User(username,password,name,type,is_deleted,create_time) 
