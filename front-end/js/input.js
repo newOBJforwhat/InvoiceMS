@@ -36,6 +36,13 @@ function input() {
   $inputForm.get(0).onsubmit = submitForm
 
   updateSupplierList('')
+
+  $('#supplier-list').click(function (e) {
+    var $supplierName = $('#supplier-name')
+    $supplierName.val($(e.target).attr('data-sname'))
+    updateSupplierList($supplierName.val())
+  })
+
   $('#supplier-name').keyup(utils.debounce(function (e) {
     updateSupplierList(e.target.value)
   }, 350))
@@ -92,13 +99,15 @@ function input() {
   }
 
   function updateSupplierList(numberOrName) {
+    var $supplierList = $('#supplier-list')
+
     $http.post('/supplier/findLike/', {
       numberOrName: numberOrName
     })
       .then(function (resp) {
-        $('#supplier-list').html('')
+        $supplierList.html('')
         resp.result.forEach(function (supplier) {
-          $('#supplier-list').append($('<li class="supplier-list-item" data-sid="' + supplier.id + '">供应商编号：' + supplier.number + '供应商名称' + supplier.name + '</li>'))
+          $supplierList.append($('<li class="supplier-list-item" data-sid="' + supplier.id + '"' + ' data-sname="' + supplier.name + '">供应商编号：' + supplier.number + ' 供应商名称：' + supplier.name + '</li>'))
         })
       })
   }

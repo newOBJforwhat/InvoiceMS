@@ -57,7 +57,7 @@ function suppliers() {
       '        </section>',
       '      </div>',
       '      <div class="modal-footer">',
-      '        <button class="btn btn-primary" type="submit">添加</button>',
+      '        <button class="btn btn-primary" type="submit">确认</button>',
       '        <button class="btn btn-danger" data-dismiss="modal">取消</button>',
       '      </div>',
       '    </form>',
